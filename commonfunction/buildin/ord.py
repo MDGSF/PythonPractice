@@ -6,8 +6,11 @@
 
 
 def main():
-    print(ord("a"))
-    print(ord('A'))
+    print('A =', ord('A'))
+    print('Z =', ord('Z'))
+
+    print('a =', ord("a"))
+    print('z =', ord('z'))
 
 
 if __name__ == "__main__":
