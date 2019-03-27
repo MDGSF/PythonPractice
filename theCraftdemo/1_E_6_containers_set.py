@@ -3,6 +3,8 @@
 
 
 def test1():
+    print('\ntest1')
+
     primes = {2, 3, 5, 7, 11, 13, 17}
     print(type(primes), primes)
 
@@ -14,7 +16,7 @@ def test1():
 
 
 def test2():
-    print()
+    print('\ntest2')
 
     a = "abcabcdeabcdbcdef"
     b = range(10)
@@ -27,7 +29,7 @@ def test2():
 
 
 def test3():
-    print()
+    print('\ntest3')
 
     a = "abcabcdeabcdbcdef"
     b = {x for x in a if x not in 'abc'}
@@ -35,7 +37,7 @@ def test3():
 
 
 def test4():
-    print()
+    print('\ntest4')
 
     admins = {'Moose', 'Joker', 'Joker'}
     moderators = {'Ann', 'Chris', 'Jane', 'Moose', 'Zero'}
@@ -87,6 +89,129 @@ def test6():
     print(new_list)
 
 
+def test7():
+    print('\ntest7')
+
+    a = {1, 2, 3}
+    b = {1, 2, 3}
+    c = {1, 2, 3, 4}
+    d = {7, 8, 9}
+    print('a =', a)
+    print('b =', b)
+    print('c =', c)
+    print('d =', d)
+
+    print('a == b', a == b)  # a 和 b 相等
+    print('a != c', a != c)  # a 和 b 不相等
+
+    # a 和 d 不重合，即 a & d == None
+    print('a.isdisjoint(d)', a.isdisjoint(d))
+
+    # a 是 b 的子集，即 a <= b
+    print('a.issubset(b)', a.issubset(b))
+    print('a.issubset(c)', a.issubset(c))
+
+    # a 是 c 的真子集，即 a < c
+    print('a < b', a < b)  # False
+    print('a < c', a < c)  # True
+
+    # 超集，b >= a, c >= a
+    print('b.issubset(a)', b.issubset(a))
+    print('c.issuperset(a)', c.issuperset(a))
+
+    # 真超集，c > a
+    print('b > a', b > a)  # False
+    print('c > a', c > a)  # True
+
+
+def test8():
+    print('\ntest8')
+
+    a = {1, 2, 3, 4, 5}
+    print(a)
+
+    a.add(1)
+    print(a)
+
+    a.add(100)
+    print(a)
+
+    # 如果不存在，会抛出 KeyError
+    a.remove(100)
+    print(a)
+
+    # 如果不存在，什么都不做
+    a.discard(1)
+    a.discard(200)
+    print(a)
+
+    # 随机 pop 一个元素出来
+    t = a.pop()
+    print(t)
+    print(a)
+
+    # 清空
+    a.clear()
+    print(a)
+
+
+def test9():
+    print('\ntest9')
+
+    a = {1, 2, 3, 4, 5}
+    b = {4, 5, 6, 7, 8}
+    print(a)
+    print(b)
+
+    # 把 b 中的所有元素加入 a
+    a.update(b)
+    print(a)
+    print(b)
+
+
+def test10():
+    print('\ntest10')
+
+    a = {1, 2, 3, 4, 5}
+    b = {4, 5, 6, 7, 8}
+    print(a)
+    print(b)
+
+    # 更新 a ，保留同时存在于 a 和 b 中的元素
+    a.intersection_update(b)
+    print(a)
+    print(b)
+
+
+def test11():
+    print('\ntest11')
+
+    a = {1, 2, 3, 4, 5}
+    b = {4, 5, 6, 7, 8}
+    print(a)
+    print(b)
+
+    # 更新 a ，删除在 b 中存在的元素
+    a.difference_update(b)
+    print(a)
+    print(b)
+
+
+def test12():
+    print('\ntest12')
+
+    a = {1, 2, 3, 4, 5}
+    b = {4, 5, 6, 7, 8}
+    print(a)
+    print(b)
+
+    # set.symmetric_difference_update(_other_)
+    # 更新 set, 只保留存在于 set 或 other 中的元素，但不保留同时存在于 set 和 other 中的元素
+    a.symmetric_difference_update(b)
+    print(a)
+    print(b)
+
+
 def main():
     test1()
     test2()
@@ -94,6 +219,12 @@ def main():
     test4()
     test5()
     test6()
+    test7()
+    test8()
+    test9()
+    test10()
+    test11()
+    test12()
 
 
 if __name__ == "__main__":
