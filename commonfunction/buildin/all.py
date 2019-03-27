@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+
 # all(iterable)
-# Return True if all elements of the iterable are true (or if the iterable is empty).
+#   Return True if all elements of the iterable are true (or if the iterable is empty).
+
 
 def main():
     a_list = []
