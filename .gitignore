@@ -105,3 +105,5 @@ venv.bak/
 
 graphvizdemo/*.gv
 graphvizdemo/*.gv.pdf
+
+theCraftdemo/results.txt
