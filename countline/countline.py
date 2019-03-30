@@ -27,8 +27,8 @@ def is_str_empty(str):
 
 
 def paramtersParse(directory, suffix, exdir, exsuffix):
-    directoryList = [os.getcwd()] if is_str_empty(
-        directory) else directory.split(',')
+    directoryList = [os.getcwd()] if is_str_empty(directory) \
+        else directory.split(',')
     suffixList = ['py'] if is_str_empty(suffix) else suffix.split(',')
     exdirList = [] if is_str_empty(exdir) else exdir.split(',')
     exsuffixList = [] if is_str_empty(exsuffix) else exsuffix.split(sep=',')
@@ -107,11 +107,16 @@ def countOneDirectory(directory, suffixs, exdirs, exsuffixs, filesLine):
                 curLines += curFileAllLines
                 curBlankLines += curFileAllBlankLines
                 curNonBlankLines += curFileAllNonBlankLines
+                filesLine[fWithPath] = {
+                    "FileAllLines": curFileAllLines,
+                    "FileAllBlankLines": curFileAllBlankLines,
+                    "FileAllNonBlankLines": curFileAllNonBlankLines
+                }
 
     return curLines, curBlankLines, curNonBlankLines
 
 
-def Count(directorys, suffixs, exdirs, exsuffixs):
+def Count(directorys, suffixs, exdirs, exsuffixs, verbose):
     """
     count all directorys.
     """
@@ -130,17 +135,24 @@ def Count(directorys, suffixs, exdirs, exsuffixs):
     print('allLine =', allLine)
     print('allBlankLine =', allBlankLine)
     print('allNonBlankLine =', allNonBlankLine)
+    if verbose:
+        for filename, value in filesLine.items():
+            print(filename, value)
 
 
 @click.command()
-@click.option('--directory', default='', help='Directory you want to search '
-                                              '(split with ,).')
-@click.option('--suffix', default='.py', help='File with suffix you want to '
-                                              'search (Default py) (split '
-                                              'with ,).')
-@click.option('--exdir', default='', help='Exclude directory (split with ,).')
-@click.option('--exsuffix', default='', help='Exclude suffix (split with ,).')
-def main(directory, suffix, exdir, exsuffix):
+@click.option('--directory', default='',
+              help='Directory you want to search (split with ,).')
+@click.option('--suffix', default='.py',
+              help='File with suffix you want to search '
+                   '(Default py) (split with ,).')
+@click.option('--exdir', default='',
+              help='Exclude directory (split with ,).')
+@click.option('--exsuffix', default='',
+              help='Exclude suffix (split with ,).')
+@click.option('--verbose', is_flag=True, default=False,
+              help='Show verbose information.')
+def main(directory, suffix, exdir, exsuffix, verbose):
     """
     Simple program that count python code lines.
     """
@@ -149,7 +161,7 @@ def main(directory, suffix, exdir, exsuffix):
         directory, suffix, exdir, exsuffix
     )
 
-    Count(directoryList, suffixList, exdirList, exsuffixList)
+    Count(directoryList, suffixList, exdirList, exsuffixList, verbose)
 
 
 if __name__ == "__main__":
