@@ -140,7 +140,7 @@ def Count(directorys, suffixs, exdirs, exsuffixs, verbose):
             print(filename, value)
 
 
-@click.command()
+@click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--directory', default='',
               help='Directory you want to search (split with ,).')
 @click.option('--suffix', default='.py',
