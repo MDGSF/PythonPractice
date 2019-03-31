@@ -3,15 +3,21 @@
 
 import turtle as t
 
-lv = 14
-l = 120
-s = 45
+lv = 14 # 树的最大层级
+s = 45 # 角度
+
+# 颜色 (r, g, b)
 r = 0
 g = 0
 b = 0
 
 
 def draw_tree(l, level):
+    """
+    画出当前 level 的树枝
+    :param l: 当前层级树枝的长度
+    :param level: 当前层级
+    """
     global r, g, b
 
     w = t.width()  # 保存当前画笔宽度
@@ -55,7 +61,7 @@ def main():
 
     t.speed(0)  # 设置画笔速度
 
-    draw_tree(l, 4)
+    draw_tree(120, 4)
 
     t.done()
 
