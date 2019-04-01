@@ -51,6 +51,22 @@ def test6():
     print([str(round(pi, i)) for i in range(1, 6)])
 
 
+def test7():
+    print('\ntest7')
+
+    matrix = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12]
+    ]
+
+    result1 = [[row[i] for row in matrix] for i in range(4)]
+    print(result1)
+
+    print(*matrix)
+    print(list(zip(*matrix)))
+
+
 def main():
     test1()
     test2()
@@ -58,6 +74,7 @@ def main():
     test4()
     test5()
     test6()
+    test7()
 
 
 if __name__ == "__main__":
