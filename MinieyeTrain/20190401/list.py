@@ -56,6 +56,9 @@ class List:
         """Len returns the number of elements of list self."""
         return self.len
 
+    def __len__(self):
+        return self.len
+
     def Front(self):
         """Front returns the first element of list or None if list is empty."""
         return None if self.len == 0 else self.root.next
@@ -222,7 +225,10 @@ class List:
 
 
 def showlist(l):
-    print('len =', l.Len(), end=', list = ')
+    print('l.Len() =', l.Len(), end=', ')
+    print('len(l) =', len(l), end=', ')
+    # print('max(l) =', max(l), end=', ')
+    print('list =', end='')
     e = l.Front()
     while e is not None:
         print(e.value, end=' ')
