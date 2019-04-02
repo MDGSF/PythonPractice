@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-class MyStack():
+class MyStack:
     def __init__(self, *args):
         self.innerList = []
 
