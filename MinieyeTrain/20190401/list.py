@@ -252,6 +252,33 @@ class List:
         self.iter.current = self.Front()
         return self.iter
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        if self.Len() != other.Len():
+            return False
+        e1 = self.Front()
+        e2 = other.Front()
+        while e1 is not None:
+            if e1.value != e2.value:
+                return False
+            e1 = e1.Next()
+            e2 = e2.Next()
+        return True
+
+    def __str__(self):
+        first = True
+        result = ""
+        e = self.Front()
+        while e is not None:
+            if not first:
+                result += " "
+            else:
+                first = False
+            result += str(e.value)
+            e = e.Next()
+        return result
+
 
 def showlist(l):
     print('l.Len() =', l.Len(), end=', ')
@@ -602,7 +629,7 @@ def testMoveUnknownMark():
 
 
 def testIter():
-    print('\ntestIter')
+    print('testIter')
     l = List()
     for i in range(10):
         l.PushBack(i)
@@ -610,6 +637,28 @@ def testIter():
     for i in l:
         print(i, end=' ')
     print()
+
+
+def testEqual():
+    print('testEqual')
+    l1 = List()
+    l2 = List()
+    l3 = List()
+
+    l1.PushBack(1)
+    l1.PushBack(2)
+    l1.PushBack(3)
+
+    l2.PushBack(1)
+    l2.PushBack(2)
+    l2.PushBack(3)
+
+    l3.PushBack(4)
+    l3.PushBack(2)
+    l3.PushBack(3)
+
+    print('l1 == l2', l1 == l2)
+    print('l1 == l3', l1 == l3)
 
 
 def main():
@@ -625,6 +674,7 @@ def main():
     testInsertAfterUnknownMark()
     testMoveUnknownMark()
     testIter()
+    testEqual()
 
 
 if __name__ == "__main__":

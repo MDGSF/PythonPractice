@@ -1,30 +1,49 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+try:
+    import list
+except:
+    _src_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    print('src_path', _src_path)
+    sys.path.append(_src_path)
+
+
 class MyStack:
     def __init__(self, *args):
-        self.innerList = []
+        self.l = list.List()
+        for i in args:
+            self.l.PushBack(i)
 
     def append(self, x):
-        self.innerList.append(x)
+        self.l.PushBack(x)
 
     def remove(self, x):
-        self.remove(x)
+        e = self.l.Front()
+        while e is not None:
+            if e.value == x:
+                self.l.Remove(e)
+                break
+            e = e.Next()
 
     def pop(self):
-        pass
+        back = self.l.Back()
+        return self.l.Remove(back)
 
     def index(self, x):
-        pass
+        for i, v in enumerate(self.l):
+            if v == x:
+                return i
+        return -1
 
     def __len__(self):
-        pass
+        return self.l.Len()
 
     def __eq__(self, other):
-        pass
+        return self.l == other.l
 
     def __str__(self):
-        pass
+        return self.l.__str__()
 
 
 def test_mylist():
@@ -35,18 +54,23 @@ def test_mylist():
     assert x == 3
 
     a.append(4)
-    print(a)
+    print('a =', a)
     # [1, 2, 4]
 
     a.remove(2)
-    print(a)
+    print('a =', a)
     # [1, 4]
 
     i = a.index(4)
-    assert i == 2
+    assert i == 1
 
     b = MyStack(1, 4)
     c = MyStack(4, 1)
+
+    print('a =', a)
+    print('b =', b)
+    print('c =', c)
+
     assert a == b
     assert b != c
 
