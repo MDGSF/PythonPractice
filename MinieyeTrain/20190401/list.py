@@ -240,7 +240,30 @@ class List:
         """
         Sort the items of the list in place
         """
-        pass
+
+        if key is None:
+            key = lambda x: x
+
+        def cmp(a, b):
+            return key(a) < key(b) if reverse else key(a) > key(b)
+
+        def swap(a, b):
+            t = a.value
+            a.value = b.value
+            b.value = t
+
+        i = 0
+        while i < len:
+
+            cur = self.Front()
+            j = 0
+            while j < len - i - 2:
+                if cmp(cur, cur.Next()):
+                    swap(cur, cur.Next())
+                cur = cur.Next()
+                j += 1
+
+            i += 1
 
     def reverse(self):
         """
