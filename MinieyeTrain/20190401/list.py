@@ -21,8 +21,8 @@ class Element:
         :param value: The value stored with this element.
         :param list: The list to which this element belongs.
         """
-        self.next = None
-        self.prev = None
+        self.__next = None
+        self.__prev = None
         self.value = val
         self.list = None
 
@@ -35,6 +35,22 @@ class Element:
         """Prev returns the previous list element or None."""
         return self.prev if self.list is not None and self.prev != \
                             self.list.root else None
+
+    @property
+    def next(self):
+        return self.__next
+
+    @next.setter
+    def next(self, v):
+        self.__next = v
+
+    @property
+    def prev(self):
+        return self.__prev
+
+    @prev.setter
+    def prev(self, v):
+        self.__prev = v
 
 
 class ListIter:
@@ -81,9 +97,6 @@ class List:
         """Len returns the number of elements of list self."""
         return self.len
 
-    def __len__(self):
-        return self.len
-
     def Front(self):
         """Front returns the first element of list or None if list is empty."""
         return None if self.len == 0 else self.root.next
@@ -97,14 +110,14 @@ class List:
         PushFront inserts a new element e with value v at the front of
         list self and returns e.
         """
-        return self.insertValue(v, self.root)
+        return self.__insertValue(v, self.root)
 
     def PushBack(self, v):
         """
         PushBack inserts a new element e with value v at the back of
         list self and returns e.
         """
-        return self.insertValue(v, self.root.prev)
+        return self.__insertValue(v, self.root.prev)
 
     def InsertBefore(self, v, mark):
         """
@@ -115,7 +128,7 @@ class List:
         """
         if mark.list != self:
             return None
-        return self.insertValue(v, mark.prev)
+        return self.__insertValue(v, mark.prev)
 
     def InsertAfter(self, v, mark):
         """
@@ -126,7 +139,7 @@ class List:
         """
         if mark.list != self:
             return None
-        return self.insertValue(v, mark)
+        return self.__insertValue(v, mark)
 
     def Remove(self, e):
         """
@@ -135,7 +148,7 @@ class List:
         The element e must not be None.
         """
         if e.list == self:
-            self.remove(e)
+            self.__remove(e)
         return e.value
 
     def MoveToFront(self, e):
@@ -146,7 +159,7 @@ class List:
         """
         if e.list != self or self.root.next == e:
             return
-        self.move(e, self.root)
+        self.__move(e, self.root)
 
     def MoveToBack(self, e):
         """
@@ -156,7 +169,7 @@ class List:
         """
         if e.list != self or self.root.prev == e:
             return
-        self.move(e, self.root.prev)
+        self.__move(e, self.root.prev)
 
     def MoveBefore(self, e, mark):
         """
@@ -167,7 +180,7 @@ class List:
         """
         if e.list != self or e == mark or mark.list != self:
             return
-        self.move(e, mark.prev)
+        self.__move(e, mark.prev)
 
     def MoveAfter(self, e, mark):
         """
@@ -178,7 +191,7 @@ class List:
         """
         if e.list != self or e == mark or mark.list != self:
             return
-        self.move(e, mark)
+        self.__move(e, mark)
 
     def PushBackList(self, other):
         """
@@ -190,7 +203,7 @@ class List:
         i = other.Len()
         e = other.Front()
         while i > 0:
-            self.insertValue(e.value, self.root.prev)
+            self.__insertValue(e.value, self.root.prev)
             i -= 1
             e = e.Next()
 
@@ -204,12 +217,12 @@ class List:
         i = other.Len()
         e = other.Back()
         while i > 0:
-            self.insertValue(e.value, self.root)
+            self.__insertValue(e.value, self.root)
             i -= 1
             e = e.Prev()
 
-    def insert(self, e, at):
-        """insert e after at, increments self.len, return e"""
+    def __insert(self, e, at):
+        """__insert e after at, increments self.len, return e"""
         n = at.next
         at.next = e
         e.prev = at
@@ -219,12 +232,14 @@ class List:
         self.len += 1
         return e
 
-    def insertValue(self, v, at):
-        """insertValue is a convenience wrapper for insert(Element(v), at)"""
-        return self.insert(Element(v), at)
+    def __insertValue(self, v, at):
+        """
+        __insertValue is a convenience wrapper for __insert(Element(v), at)
+        """
+        return self.__insert(Element(v), at)
 
-    def remove(self, e):
-        """remove removes e from its list, decrements self.len, return e"""
+    def __remove(self, e):
+        """__remove removes e from its list, decrements self.len, return e"""
         e.prev.next = e.next
         e.next.prev = e.prev
         e.next = None
@@ -233,8 +248,8 @@ class List:
         self.len -= 1
         return e
 
-    def move(self, e, at):
-        """move moves e to next to at and returns e"""
+    def __move(self, e, at):
+        """__move moves e to next to at and returns e"""
         if e == at:
             return e
         e.prev.next = e.next
@@ -248,10 +263,16 @@ class List:
 
         return e
 
+    # support len(obj)
+    def __len__(self):
+        return self.len
+
+    # support iterable, ex. for i in list:
     def __iter__(self):
         self.iter.current = self.Front()
         return self.iter
 
+    # support ==
     def __eq__(self, other):
         if other is None:
             return False
@@ -266,6 +287,7 @@ class List:
             e2 = e2.Next()
         return True
 
+    # list to string, ex. print(list)
     def __str__(self):
         first = True
         result = ""
@@ -278,6 +300,50 @@ class List:
             result += str(e.value)
             e = e.Next()
         return result
+
+    # support list[key]
+    def __getitem__(self, key):
+        if type(key) != int:
+            raise TypeError
+        if key >= self.len or key < 0:
+            raise IndexError()
+        i = 0
+        e = self.Front()
+        while e is not None:
+            if i == key:
+                return e.value
+            e = e.Next()
+            i += 1
+
+    # support list[key] = value
+    def __setitem__(self, key, value):
+        if type(key) != int:
+            raise TypeError
+        if key >= self.len or key < 0:
+            raise IndexError()
+        i = 0
+        e = self.Front()
+        while e is not None:
+            if i == key:
+                e.value = value
+                break
+            e = e.Next()
+            i += 1
+
+    # support del list[key]
+    def __delitem__(self, key):
+        if type(key) != int:
+            raise TypeError
+        if key >= self.len or key < 0:
+            raise IndexError()
+        i = 0
+        e = self.Front()
+        while e is not None:
+            if i == key:
+                self.Remove(e)
+                break
+            e = e.Next()
+            i += 1
 
 
 def showlist(l):
@@ -661,6 +727,54 @@ def testEqual():
     print('l1 == l3', l1 == l3)
 
 
+def testMaxMin():
+    print('\ntestMaxMin')
+    l = List()
+    l.PushBack(1)
+    l.PushBack(2)
+    l.PushBack(3)
+    print('max =', max(l))
+    print('min =', min(l))
+
+
+def testSort():
+    print('\ntestSort')
+    l = List()
+    l.PushBack(9)
+    l.PushBack(8)
+    l.PushBack(7)
+    l.PushBack(1)
+    l.PushBack(2)
+    l.PushBack(3)
+    checkList(l, [9, 8, 7, 1, 2, 3])
+
+    newl = sorted(l)
+    print('type(newl) =', type(newl))
+    print(newl)
+
+
+def testIndex():
+    print('\ntestIndex')
+
+    l = List()
+    l.PushBack(1)
+    l.PushBack(2)
+    l.PushBack(3)
+
+    print('l[0] =', l[0])
+    print('l[1] =', l[1])
+    print('l[2] =', l[2])
+    # print('l[3] =', l[3]) # IndexError
+
+    l[0] = 100
+    l[1] = 200
+    l[2] = 300
+    checkList(l, [100, 200, 300])
+
+    del l[1]
+    checkList(l, [100, 300])
+
+
 def main():
     test1()
     testList()
@@ -675,6 +789,9 @@ def main():
     testMoveUnknownMark()
     testIter()
     testEqual()
+    testMaxMin()
+    testSort()
+    testIndex()
 
 
 if __name__ == "__main__":
