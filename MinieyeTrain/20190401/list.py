@@ -246,7 +246,12 @@ class List:
         """
         Reverse the elements of the list in place.
         """
-        pass
+        length = self.len
+        i = 0
+        while i < length:
+            e = self.__remove(self.root.prev)
+            self.__insert(e, self.root)
+            i += 1
 
     def copy(self):
         """
