@@ -188,7 +188,41 @@ class List:
         of the list. The returned index is computed relative to the beginning
         of the full sequence rather than the start argument.
         """
-        pass
+        x = None
+        start = 0
+        end = self.len
+        if len(args) == 0:
+            return
+
+        if len(args) >= 1:
+            x = args[0]
+
+        if len(args) >= 2:
+            if type(args[1]) != int:
+                raise TypeError
+            if args[1] < 0 or args[1] > self.len:
+                raise IndexError
+            start = args[1]
+
+        if len(args) >= 3:
+            if type(args[2]) != int:
+                raise TypeError
+            if args[2] < 0 or args[2] > self.len:
+                raise IndexError
+            end = args[2]
+
+        curE = self.Front()
+        i = 0
+        while i < start:
+            curE = curE.Next()
+            i += 1
+        while i < end:
+            if x == curE.value:
+                return i
+            curE = curE.Next()
+            i += 1
+
+        raise ValueError
 
     def count(self, x):
         """
