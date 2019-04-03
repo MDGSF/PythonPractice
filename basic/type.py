@@ -27,15 +27,21 @@ h = Husky()
 
 
 def test1():
-    print(type([1,2,3]))
+    print(type([1, 2, 3]))
+    print(type((1, 2, 3)))
     print(type(123))
+    print(type(123.45))
     print(type('str'))
     print(type(None))
     print(type(abs))
     print(type(a))
 
     print(type([1, 2, 3]) == list)
+    print(type((1, 2, 3)) == tuple)
+    print(type({1, 2, 3}) == set)
+    print(type({"huangjian": 1}) == dict)
     print(type(123) == int)
+    print(type(123.45) == float)
     print(type('str') == str)
     print(type(fn) == types.FunctionType)
     print(type(abs) == types.BuiltinFunctionType)
