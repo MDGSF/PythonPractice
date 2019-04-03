@@ -245,7 +245,8 @@ class List:
             key = lambda x: x
 
         def cmp(a, b):
-            return key(a) < key(b) if reverse else key(a) > key(b)
+            return key(a.value) < key(b.value) if reverse \
+                else key(a.value) > key(b.value)
 
         def swap(a, b):
             t = a.value
@@ -253,11 +254,11 @@ class List:
             b.value = t
 
         i = 0
-        while i < len:
+        while i < self.len:
 
             cur = self.Front()
             j = 0
-            while j < len - i - 2:
+            while j < self.len - i - 1:
                 if cmp(cur, cur.Next()):
                     swap(cur, cur.Next())
                 cur = cur.Next()
@@ -269,12 +270,7 @@ class List:
         """
         Reverse the elements of the list in place.
         """
-        length = self.len
-        i = 0
-        while i < length:
-            e = self.__remove(self.root.prev)
-            self.__insert(e, self.root)
-            i += 1
+        pass
 
     def copy(self):
         """
