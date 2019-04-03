@@ -97,14 +97,15 @@ class List:
         """
         Add an item to the end of the list. Equivalent to a[len(a):] = [x].
         """
-        pass
+        self.__insertValue(x, self.root.prev)
 
     def extend(self, iterable):
         """
         Extend the list by appending all the items from the iterable.
         Equivalent to a[len(a):] = iterable.
         """
-        pass
+        for x in iterable:
+            self.__insertValue(x, self.root.prev)
 
     def insert(self, i, x):
         """
@@ -113,14 +114,33 @@ class List:
         so a.insert(0, x) inserts at the front of the list,
         and a.insert(len(a), x) is equivalent to a.append(x).
         """
-        pass
+        if i < 0 or i > self.len:
+            raise IndexError
+        if i == 0:
+            self.__insertValue(x, self.root)
+        elif i == self.len:
+            self.__insertValue(x, self.root.prev)
+        else:
+            idx = 0
+            e = self.Front()
+            while e is not None:
+                if idx == i:
+                    self.__insertValue(x, e.Prev())
+                e = e.Next()
+                idx += 1
 
     def remove(self, x):
         """
         Remove the first item from the list whose value is equal to x.
         It raises a ValueError if there is no such item.
         """
-        pass
+        e = self.Front()
+        while e is not None:
+            if e.value == x:
+                self.Remove(e)
+                return
+            e = e.Next()
+        raise ValueError
 
     def pop(self, *args, **kwargs):
         """
@@ -130,13 +150,32 @@ class List:
         in the list.
         Raises IndexError if list is empty or index is out of range.
         """
-        pass
+        if self.len == 0:
+            raise IndexError
+        if len(args) == 0:
+            return self.Remove(self.Back())
+        elif len(args) == 1:
+            idx = args[0]
+            if idx < 0 or idx >= self.len:
+                raise IndexError
+            i = 0
+            e = self.Front()
+            while e is not None:
+                if i == idx:
+                    return self.Remove(e)
+                e = e.Next()
+                i += 1
+        else:
+            pass
 
     def clear(self):
         """
         Remove all items from the list. Equivalent to del a[:].
         """
-        pass
+        self.root = Element()
+        self.root.next = self.root
+        self.root.prev = self.root
+        self.len = 0
 
     def index(self, *args, **kwargs):
         """
@@ -155,7 +194,13 @@ class List:
         """
         Return the number of times x appears in the list.
         """
-        pass
+        result = 0
+        e = self.Front()
+        while e is not None:
+            if e.value == x:
+                result += 1
+            e = e.Next()
+        return result
 
     def sort(self, key=None, reverse=False):
         """
@@ -173,7 +218,9 @@ class List:
         """
         Return a shallow copy of the list. Equivalent to a[:].
         """
-        pass
+        shadowList = List()
+        shadowList.PushBackList(self)
+        return shadowList
 
     def Len(self):
         """Len returns the number of elements of list self."""
@@ -813,10 +860,11 @@ def testIter():
     l = List()
     for i in range(10):
         l.PushBack(i)
-    showlist(l)
+
+    k = 0
     for i in l:
-        print(i, end=' ')
-    print()
+        assert i == k
+        k += 1
 
 
 def testEqual():
@@ -837,29 +885,29 @@ def testEqual():
     l3.PushBack(2)
     l3.PushBack(3)
 
-    print('l1 == l2', l1 == l2)  # True
-    print('l1 != l2', l1 != l2)  # False
-    print('l1 > l2', l1 > l2)  # False
-    print('l3 > l1', l3 > l1)  # True
-    print('l1 >= l2', l1 >= l2)  # True
-    print('l1 < l2', l1 < l2)  # False
+    assert (l1 == l2) == True
+    assert (l1 != l2) == False
+    assert (l1 > l2) == False
+    assert (l3 > l1) == True
+    assert (l1 >= l2) == True
+    assert (l1 < l2) == False
 
-    print('l1 == l3', l1 == l3)  # False
-    print('l1 != l3', l1 != l3)  # True
+    assert (l1 == l3) == False
+    assert (l1 != l3) == True
 
 
 def testMaxMin():
-    print('\ntestMaxMin')
+    print('testMaxMin')
     l = List()
     l.PushBack(1)
     l.PushBack(2)
     l.PushBack(3)
-    print('max =', max(l))
-    print('min =', min(l))
+    assert max(l) == 3
+    assert min(l) == 1
 
 
 def testSort():
-    print('\ntestSort')
+    print('testSort')
     l = List()
     l.PushBack(9)
     l.PushBack(8)
@@ -870,21 +918,20 @@ def testSort():
     checkList(l, [9, 8, 7, 1, 2, 3])
 
     newl = sorted(l)
-    print('type(newl) =', type(newl))
-    print(newl)
+    print(f'type(newl) = {type(newl)}, newl = {newl}')
 
 
 def testIndex():
-    print('\ntestIndex')
+    print('testIndex')
 
     l = List()
     l.PushBack(1)
     l.PushBack(2)
     l.PushBack(3)
 
-    print('l[0] =', l[0])
-    print('l[1] =', l[1])
-    print('l[2] =', l[2])
+    assert l[0] == 1
+    assert l[1] == 2
+    assert l[2] == 3
     # print('l[3] =', l[3]) # IndexError
 
     l[0] = 100

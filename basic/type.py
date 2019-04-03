@@ -27,12 +27,14 @@ h = Husky()
 
 
 def test1():
+    print(type([1,2,3]))
     print(type(123))
     print(type('str'))
     print(type(None))
     print(type(abs))
     print(type(a))
 
+    print(type([1, 2, 3]) == list)
     print(type(123) == int)
     print(type('str') == str)
     print(type(fn) == types.FunctionType)

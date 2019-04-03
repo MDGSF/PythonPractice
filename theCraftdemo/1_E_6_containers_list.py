@@ -8,8 +8,9 @@ def test1():
     # 生成一个列表
 
     a_list = []
-    a_list.append(1)
+    r = a_list.append(1)
     a_list.append(2)
+    print('r =', r)
     print(a_list, f'has a length of {len(a_list)}.')
 
     b_list = [1, 2, 3]
