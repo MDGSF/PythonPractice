@@ -36,6 +36,11 @@ class Element:
         return self.prev if self.list is not None and self.prev != \
                             self.list.root else None
 
+    def swap(self, other):
+        t = self.value
+        self.value = other.value
+        other.value = t
+
     @property
     def next(self):
         return self.__next
@@ -248,29 +253,31 @@ class List:
             return key(a.value) < key(b.value) if reverse \
                 else key(a.value) > key(b.value)
 
-        def swap(a, b):
-            t = a.value
-            a.value = b.value
-            b.value = t
-
         i = 0
         while i < self.len:
-
             cur = self.Front()
             j = 0
             while j < self.len - i - 1:
                 if cmp(cur, cur.Next()):
-                    swap(cur, cur.Next())
+                    cur.swap(cur.Next())
                 cur = cur.Next()
                 j += 1
-
             i += 1
 
     def reverse(self):
         """
         Reverse the elements of the list in place.
         """
-        pass
+        leftE = self.Front()
+        rightE = self.Back()
+        left = 0
+        right = self.len - 1
+        while left < right:
+            leftE.swap(rightE)
+            leftE = leftE.Next()
+            rightE = rightE.Prev()
+            left += 1
+            right -= 1
 
     def copy(self):
         """

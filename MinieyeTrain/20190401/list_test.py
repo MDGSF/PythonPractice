@@ -647,11 +647,24 @@ class TestList(unittest.TestCase):
         l.PushBack(1)
         l.PushBack(2)
         l.PushBack(3)
-        showlist(l)
 
         l.reverse()
-        showlist(l)
-        # checkList(l, [3, 2, 1])
+        checkList(l, [3, 2, 1])
+
+    def test_copy(self):
+        l = List()
+        l.PushBack(1)
+        l.PushBack(2)
+        l.PushBack(3)
+
+        newl = l.copy()
+        checkList(l, [1, 2, 3])
+        checkList(newl, [1, 2, 3])
+
+        f = newl.Front()
+        f.value = 100
+        checkList(l, [1, 2, 3])
+        checkList(newl, [100, 2, 3])
 
 
 if __name__ == "__main__":
