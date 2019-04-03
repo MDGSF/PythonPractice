@@ -1,8 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+"""
+https://docs.python.org/3/library/unittest.html
+
+assertEqual(a, b)        a == b
+assertNotEqual(a, b)     a != b
+assertTrue(x)            bool(x) is True
+assertFalse(x)           bool(x) is False
+assertIsNone(x)          x is None
+assertIsNotNone(x)       x is not None
+assertIn(a, b)           a in b
+assertNotIn(a, b)        a not in b
+
+python list_test.py
+python list_test.py -v
+python -m unittest list_test
+"""
+
 import sys
 import os
+import unittest
 
 try:
     from list import *
@@ -438,27 +456,6 @@ def testSort():
     checkPythonInnerList(newl, [1, 2, 3, 7, 8, 9])
 
 
-@listtest
-def testIndex():
-    l = List()
-    l.PushBack(1)
-    l.PushBack(2)
-    l.PushBack(3)
-
-    assert l[0] == 1
-    assert l[1] == 2
-    assert l[2] == 3
-    # print('l[3] =', l[3]) # IndexError
-
-    l[0] = 100
-    l[1] = 200
-    l[2] = 300
-    checkList(l, [100, 200, 300])
-
-    del l[1]
-    checkList(l, [100, 300])
-
-
 def main():
     test1()
     testList()
@@ -475,8 +472,37 @@ def main():
     testEqual()
     testMaxMin()
     testSort()
-    testIndex()
+
+
+class TestList(unittest.TestCase):
+
+    def setUp(self):
+        print('setUp...')
+
+    def tearDown(self):
+        print('tearDown...')
+
+    def test_Index(self):
+        l = List()
+        l.PushBack(1)
+        l.PushBack(2)
+        l.PushBack(3)
+
+        self.assertEqual(l[0], 1)
+        self.assertTrue(l[1] == 2, True)
+        assert l[2] == 3
+        with self.assertRaises(IndexError):
+            l[3]
+
+        l[0] = 100
+        l[1] = 200
+        l[2] = 300
+        checkList(l, [100, 200, 300])
+
+        del l[1]
+        checkList(l, [100, 300])
 
 
 if __name__ == "__main__":
     main()
+    unittest.main()
