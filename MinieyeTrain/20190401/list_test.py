@@ -667,6 +667,14 @@ class TestList(unittest.TestCase):
         checkList(newl, [100, 2, 3])
 
 
+    def test_slice(self):
+        l = List()
+        l.PushBack(1)
+        l.PushBack(2)
+        l.PushBack(3)
+        print(l[1:])
+
+
 if __name__ == "__main__":
     main()
     unittest.main()

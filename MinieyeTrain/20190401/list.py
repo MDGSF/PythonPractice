@@ -529,6 +529,7 @@ class List:
 
     def __getitem__(self, key):
         """support list[key]"""
+        print(f'__getitem__, key = {key}, type(key) = {type(key)}')
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
@@ -543,6 +544,7 @@ class List:
 
     def __setitem__(self, key, value):
         """support list[key] = value"""
+        print('__setitem__')
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
@@ -558,6 +560,7 @@ class List:
 
     def __delitem__(self, key):
         """support del list[key]"""
+        print('__delitem__')
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
