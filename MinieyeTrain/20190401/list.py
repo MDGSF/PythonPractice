@@ -263,17 +263,17 @@ class List:
 
         return e
 
-    # support len(obj)
     def __len__(self):
+        """support len(obj)"""
         return self.len
 
-    # support iterable, ex. for i in list:
     def __iter__(self):
+        """support iterable, ex. for i in list:"""
         self.iter.current = self.Front()
         return self.iter
 
-    # support ==
     def __eq__(self, other):
+        """support =="""
         if other is None:
             return False
         if self.Len() != other.Len():
@@ -287,8 +287,40 @@ class List:
             e2 = e2.Next()
         return True
 
-    # list to string, ex. print(list)
+    def __ge__(self, other):
+        """support >="""
+        if other is None:
+            return True
+        e1 = self.Front()
+        e2 = other.Front()
+        while e1 is not None and e2 is not None:
+            if e1.value > e2.value:
+                return True
+            e1 = e1.Next()
+            e2 = e2.Next()
+        if e1 is not None:
+            return True
+        if e1 is None and e2 is None:
+            return True
+        return False
+
+    def __gt__(self, other):
+        """support >"""
+        if other is None:
+            return True
+        e1 = self.Front()
+        e2 = other.Front()
+        while e1 is not None and e2 is not None:
+            if e1.value > e2.value:
+                return True
+            e1 = e1.Next()
+            e2 = e2.Next()
+        if e1 is not None:
+            return True
+        return False
+
     def __str__(self):
+        """list to string, ex. print(list)"""
         first = True
         result = ""
         e = self.Front()
@@ -301,8 +333,8 @@ class List:
             e = e.Next()
         return result
 
-    # support list[key]
     def __getitem__(self, key):
+        """support list[key]"""
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
@@ -315,8 +347,8 @@ class List:
             e = e.Next()
             i += 1
 
-    # support list[key] = value
     def __setitem__(self, key, value):
+        """support list[key] = value"""
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
@@ -330,8 +362,8 @@ class List:
             e = e.Next()
             i += 1
 
-    # support del list[key]
     def __delitem__(self, key):
+        """support del list[key]"""
         if type(key) != int:
             raise TypeError
         if key >= self.len or key < 0:
@@ -723,8 +755,15 @@ def testEqual():
     l3.PushBack(2)
     l3.PushBack(3)
 
-    print('l1 == l2', l1 == l2)
-    print('l1 == l3', l1 == l3)
+    print('l1 == l2', l1 == l2)  # True
+    print('l1 != l2', l1 != l2)  # False
+    print('l1 > l2', l1 > l2)    # False
+    print('l3 > l1', l3 > l1)    # True
+    print('l1 >= l2', l1 >= l2)  # True
+    print('l1 < l2', l1 < l2)    # False
+
+    print('l1 == l3', l1 == l3)  # False
+    print('l1 != l3', l1 != l3)  # True
 
 
 def testMaxMin():
