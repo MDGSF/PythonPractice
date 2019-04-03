@@ -124,7 +124,8 @@ def test7():
     n = 10
 
     a_list = [chr(random.randrange(65, 91)) for i in range(n)]
-    print(f'a_list comprehends {len(a_list)} random string elements:\n', a_list)
+    print(f'a_list comprehends {len(a_list)} random string elements:\n',
+          a_list)
 
     a_list.sort()
     print('the list sorted:\n', a_list)
@@ -134,8 +135,10 @@ def test7():
 
     print()
 
-    b_list = [chr(random.randrange(65, 91)) + chr(random.randrange(97, 123)) for i in range(n)]
-    print(f'b_list comprehends {len(b_list)} random string elements:\n', b_list)
+    b_list = [chr(random.randrange(65, 91)) + chr(random.randrange(97, 123))
+              for i in range(n)]
+    print(f'b_list comprehends {len(b_list)} random string elements:\n',
+          b_list)
 
     b_list.sort()
     print('the sorted:\n', b_list)

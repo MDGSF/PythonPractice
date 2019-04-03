@@ -93,6 +93,88 @@ class List:
         self.len = 0
         self.iter = ListIter(self)
 
+    def append(self, x):
+        """
+        Add an item to the end of the list. Equivalent to a[len(a):] = [x].
+        """
+        pass
+
+    def extend(self, iterable):
+        """
+        Extend the list by appending all the items from the iterable.
+        Equivalent to a[len(a):] = iterable.
+        """
+        pass
+
+    def insert(self, i, x):
+        """
+        Insert an item at a given position.
+        The first argument is the index of the element before which to insert,
+        so a.insert(0, x) inserts at the front of the list,
+        and a.insert(len(a), x) is equivalent to a.append(x).
+        """
+        pass
+
+    def remove(self, x):
+        """
+        Remove the first item from the list whose value is equal to x.
+        It raises a ValueError if there is no such item.
+        """
+        pass
+
+    def pop(self, *args, **kwargs):
+        """
+        list.pop([i])
+        Remove the item at the given position in the list, and return it.
+        If no index is specified, a.pop() removes and returns the last item
+        in the list.
+        Raises IndexError if list is empty or index is out of range.
+        """
+        pass
+
+    def clear(self):
+        """
+        Remove all items from the list. Equivalent to del a[:].
+        """
+        pass
+
+    def index(self, *args, **kwargs):
+        """
+        list.index(x[, start[, end]])
+        Return zero-based index in the list of the first item whose value
+        is equal to x. Raises a ValueError if there is no such item.
+
+        The optional arguments start and end are interpreted as in the slice
+        notation and are used to limit the search to a particular subsequence
+        of the list. The returned index is computed relative to the beginning
+        of the full sequence rather than the start argument.
+        """
+        pass
+
+    def count(self, x):
+        """
+        Return the number of times x appears in the list.
+        """
+        pass
+
+    def sort(self, key=None, reverse=False):
+        """
+        Sort the items of the list in place
+        """
+        pass
+
+    def reverse(self):
+        """
+        Reverse the elements of the list in place.
+        """
+        pass
+
+    def copy(self):
+        """
+        Return a shallow copy of the list. Equivalent to a[:].
+        """
+        pass
+
     def Len(self):
         """Len returns the number of elements of list self."""
         return self.len
@@ -757,10 +839,10 @@ def testEqual():
 
     print('l1 == l2', l1 == l2)  # True
     print('l1 != l2', l1 != l2)  # False
-    print('l1 > l2', l1 > l2)    # False
-    print('l3 > l1', l3 > l1)    # True
+    print('l1 > l2', l1 > l2)  # False
+    print('l3 > l1', l3 > l1)  # True
     print('l1 >= l2', l1 >= l2)  # True
-    print('l1 < l2', l1 < l2)    # False
+    print('l1 < l2', l1 < l2)  # False
 
     print('l1 == l3', l1 == l3)  # False
     print('l1 != l3', l1 != l3)  # True
