@@ -527,49 +527,113 @@ class List:
             e = e.Next()
         return result
 
-    def __getitem__(self, key):
-        """support list[key]"""
-        print(f'__getitem__, key = {key}, type(key) = {type(key)}')
-        if type(key) != int:
-            raise TypeError
-        if key >= self.len or key < 0:
-            raise IndexError()
-        i = 0
+    def __find(self, idx):
+        """
+        __find will find list[idx], and returns e.
+        """
         e = self.Front()
+        i = 0
         while e is not None:
-            if i == key:
-                return e.value
+            if i == idx:
+                return e
             e = e.Next()
             i += 1
+
+    def __getitem__(self, key):
+        """support list[key]"""
+        if type(key) == int:
+            if key >= self.len or key < 0:
+                raise IndexError()
+            i = 0
+            e = self.Front()
+            while e is not None:
+                if i == key:
+                    return e.value
+                e = e.Next()
+                i += 1
+        elif type(key) == slice:
+            start, stop, step = key.start, key.stop, key.step
+            if start is None:
+                start = 0
+            if stop is None:
+                stop = self.len
+            if start < 0:
+                if abs(start) >= self.len:
+                    start = 0
+                else:
+                    start = self.len + start
+            else:
+                if start > self.len:
+                    start = self.len
+            if stop < 0:
+                if abs(stop) >= self.len:
+                    stop = 0
+                else:
+                    stop = self.len + stop
+            else:
+                if stop > self.len:
+                    stop = self.len
+            if step is None:
+                step = 1
+
+            if step == 0:
+                raise ValueError('slice step cannot be zero')
+
+            if start == stop:
+                return List()
+
+            if start > stop and step > 0:
+                return List()
+
+            if start < stop and step < 0:
+                return List()
+
+            newlist = List()
+            cur = start
+            while True:
+                if start < stop <= cur:
+                    break
+                if start > stop >= cur:
+                    break
+                e = self.__find(cur)
+                newlist.PushBack(e.value)
+                cur += step
+            return newlist
+        else:
+            raise TypeError
 
     def __setitem__(self, key, value):
         """support list[key] = value"""
-        print('__setitem__')
-        if type(key) != int:
+        if type(key) == int:
+            if key >= self.len or key < 0:
+                raise IndexError()
+            i = 0
+            e = self.Front()
+            while e is not None:
+                if i == key:
+                    e.value = value
+                    break
+                e = e.Next()
+                i += 1
+        elif type(key) == slice:
+            pass
+        else:
             raise TypeError
-        if key >= self.len or key < 0:
-            raise IndexError()
-        i = 0
-        e = self.Front()
-        while e is not None:
-            if i == key:
-                e.value = value
-                break
-            e = e.Next()
-            i += 1
 
     def __delitem__(self, key):
         """support del list[key]"""
-        print('__delitem__')
-        if type(key) != int:
+        if type(key) == int:
+            if key >= self.len or key < 0:
+                raise IndexError()
+            i = 0
+            e = self.Front()
+            while e is not None:
+                if i == key:
+                    self.Remove(e)
+                    break
+                e = e.Next()
+                i += 1
+        elif type(key) == slice:
+            pass
+        else:
             raise TypeError
-        if key >= self.len or key < 0:
-            raise IndexError()
-        i = 0
-        e = self.Front()
-        while e is not None:
-            if i == key:
-                self.Remove(e)
-                break
-            e = e.Next()
-            i += 1
