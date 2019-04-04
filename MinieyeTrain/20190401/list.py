@@ -129,8 +129,16 @@ class List:
         so a.insert(0, x) inserts at the front of the list,
         and a.insert(len(a), x) is equivalent to a.append(x).
         """
-        if i < 0 or i > self.len:
-            raise IndexError
+        i = int(i)
+
+        if i < 0:
+            if abs(i) >= self.len:
+                i = 0
+            else:
+                i = self.len + i
+        if i > self.len:
+            i = self.len
+
         if i == 0:
             self.__insertValue(x, self.root)
         elif i == self.len:

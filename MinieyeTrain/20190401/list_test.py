@@ -538,8 +538,17 @@ class TestList(unittest.TestCase):
         l.insert(1, 2)
         checkList(l, [8, 2, 99, 1])
 
-        with self.assertRaises(IndexError):
-            l.insert(100, 100)
+        l.insert(100, 100)
+        checkList(l, [8, 2, 99, 1, 100])
+
+        l.insert(-100, 666)
+        checkList(l, [666, 8, 2, 99, 1, 100])
+
+        l.insert(-1, 456)
+        checkList(l, [666, 8, 2, 99, 1, 456, 100])
+
+        with self.assertRaises(ValueError):
+            l.insert('hj', 10)
 
     def test_remove(self):
         l = List()
