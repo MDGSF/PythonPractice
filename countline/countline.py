@@ -26,9 +26,15 @@ def is_str_empty(str):
     return len(str) == 0 or len(str.strip()) == 0
 
 
-def paramtersParse(directory, suffix, exdir, exsuffix):
-    directoryList = [os.getcwd()] if is_str_empty(directory) \
-        else directory.split(',')
+def paramtersParse(dir, directory, suffix, exdir, exsuffix):
+    if is_str_empty(directory):
+        if is_str_empty(dir):
+            directoryList = [os.getcwd()]
+        else:
+            directoryList = [dir]
+    else:
+        directoryList = directory.split(',')
+
     suffixList = ['py'] if is_str_empty(suffix) else suffix.split(',')
     exdirList = [] if is_str_empty(exdir) else exdir.split(',')
     exsuffixList = [] if is_str_empty(exsuffix) else exsuffix.split(sep=',')
@@ -141,6 +147,7 @@ def Count(directorys, suffixs, exdirs, exsuffixs, verbose):
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
+@click.argument('dir')
 @click.option('--directory', default='',
               help='Directory you want to search (split with ,).')
 @click.option('--suffix', default='.py',
@@ -152,13 +159,13 @@ def Count(directorys, suffixs, exdirs, exsuffixs, verbose):
               help='Exclude suffix (split with ,).')
 @click.option('--verbose', is_flag=True, default=False,
               help='Show verbose information.')
-def main(directory, suffix, exdir, exsuffix, verbose):
+def main(dir, directory, suffix, exdir, exsuffix, verbose):
     """
     Simple program that count python code lines.
     """
 
     directoryList, suffixList, exdirList, exsuffixList = paramtersParse(
-        directory, suffix, exdir, exsuffix
+        dir, directory, suffix, exdir, exsuffix
     )
 
     Count(directoryList, suffixList, exdirList, exsuffixList, verbose)
