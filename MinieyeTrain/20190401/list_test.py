@@ -686,6 +686,12 @@ class TestList(unittest.TestCase):
         l1 = List(1, 2, 3)
         checkList(l1, [1, 2, 3])
 
+        l2 = List(l)
+        checkList(l2, [1, 2, 3])
+
+        l3 = List(l, l1)
+        checkList(l3, [1, 2, 3, 1, 2, 3])
+
 
 class TestListSlice(unittest.TestCase):
 
