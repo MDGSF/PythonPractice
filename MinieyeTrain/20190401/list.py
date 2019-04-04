@@ -10,6 +10,7 @@ Module list implements a double linked list.
 
 from collections import Iterable
 
+
 class Element:
     """
     Element is an element of linked list.
@@ -106,7 +107,6 @@ class List:
                         self.__insertValue(x, self.root.prev)
                 else:
                     self.__insertValue(arg, self.root.prev)
-
 
     def append(self, x):
         """
@@ -491,6 +491,9 @@ class List:
             e2 = e2.Next()
         return True
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __ge__(self, other):
         """support >="""
         if other is None:
@@ -522,6 +525,12 @@ class List:
         if e1 is not None:
             return True
         return False
+
+    def __le__(self, other):
+        return not self.__gt__(other)
+
+    def __lt__(self, other):
+        return not self.__ge__(other)
 
     def __str__(self):
         """list to string, ex. print(list)"""
