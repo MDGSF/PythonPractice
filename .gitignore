@@ -107,3 +107,6 @@ graphvizdemo/*.gv
 graphvizdemo/*.gv.pdf
 
 theCraftdemo/results.txt
+*.swp
+*.swo
+*.swn

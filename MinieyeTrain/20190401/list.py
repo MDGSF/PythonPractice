@@ -8,6 +8,7 @@ Date: 2019-04-02
 Module list implements a double linked list.
 """
 
+from collections import Iterable
 
 class Element:
     """
@@ -86,7 +87,7 @@ class List:
     List represents a doubly linked list.
     """
 
-    def __init__(self):
+    def __init__(self, *args):
         """
         @param root: sentinel list element
         @param len: current list length excluding (this) sentinel element
@@ -97,6 +98,15 @@ class List:
         self.root.prev = self.root
         self.len = 0
         self.iter = ListIter(self)
+
+        if len(args) > 0:
+            for arg in args:
+                if isinstance(arg, Iterable):
+                    for x in arg:
+                        self.__insertValue(x, self.root.prev)
+                else:
+                    self.__insertValue(arg, self.root.prev)
+
 
     def append(self, x):
         """
@@ -539,6 +549,68 @@ class List:
             e = e.Next()
             i += 1
 
+    @staticmethod
+    def __find_relative(e, step):
+        """
+        __find_relative returns new element raletive to e+step or e-step.
+        """
+        newe = e
+        if step == 0:
+            return newe
+        elif step > 0:
+            while step > 0:
+                newe = newe.Next()
+                if newe is None:
+                    return newe
+                step -= 1
+            return newe
+        else:  # step < 0
+            while step < 0:
+                newe = newe.Prev()
+                if newe is None:
+                    return newe
+                step += 1
+            return newe
+
+    def __process_slice(self, start, stop, step):
+        if start is None:
+            start = 0
+        if stop is None:
+            stop = self.len
+        if start < 0:
+            if abs(start) >= self.len:
+                start = 0
+            else:
+                start = self.len + start
+        else:
+            if start > self.len:
+                start = self.len
+        if stop < 0:
+            if abs(stop) >= self.len:
+                stop = -1
+            else:
+                stop = self.len + stop
+        else:
+            if stop > self.len:
+                stop = self.len
+        if step is None:
+            step = 1
+
+        if step == 0:
+            raise ValueError('slice step cannot be zero')
+
+        return start, stop, step
+
+    @staticmethod
+    def __is_empty_slice(start, stop, step):
+        if start == stop:
+            return True
+        if start > stop and step > 0:
+            return True
+        if start < stop and step < 0:
+            return True
+        return False
+
     def __getitem__(self, key):
         """support list[key]"""
         if type(key) == int:
@@ -552,51 +624,22 @@ class List:
                 e = e.Next()
                 i += 1
         elif type(key) == slice:
-            start, stop, step = key.start, key.stop, key.step
-            if start is None:
-                start = 0
-            if stop is None:
-                stop = self.len
-            if start < 0:
-                if abs(start) >= self.len:
-                    start = 0
-                else:
-                    start = self.len + start
-            else:
-                if start > self.len:
-                    start = self.len
-            if stop < 0:
-                if abs(stop) >= self.len:
-                    stop = 0
-                else:
-                    stop = self.len + stop
-            else:
-                if stop > self.len:
-                    stop = self.len
-            if step is None:
-                step = 1
+            start, stop, step = \
+                self.__process_slice(key.start, key.stop, key.step)
 
-            if step == 0:
-                raise ValueError('slice step cannot be zero')
-
-            if start == stop:
-                return List()
-
-            if start > stop and step > 0:
-                return List()
-
-            if start < stop and step < 0:
+            if self.__is_empty_slice(start, stop, step):
                 return List()
 
             newlist = List()
             cur = start
+            e = self.__find(cur)
             while True:
                 if start < stop <= cur:
                     break
                 if start > stop >= cur:
                     break
-                e = self.__find(cur)
                 newlist.PushBack(e.value)
+                e = self.__find_relative(e, step)
                 cur += step
             return newlist
         else:
@@ -616,7 +659,37 @@ class List:
                 e = e.Next()
                 i += 1
         elif type(key) == slice:
-            pass
+            if not isinstance(value, Iterable):
+                raise TypeError('can only assign an iterable')
+
+            start, stop, step = \
+                self.__process_slice(key.start, key.stop, key.step)
+
+            if self.__is_empty_slice(start, stop, step):
+                return
+
+            templist = List(value)
+            if templist.Len() == 0:
+                self.__delitem__(key)
+                return
+
+            tcur = templist.Front()
+
+            cur = start
+            e = self.__find(cur)
+            while True:
+                if start < stop <= cur:
+                    break
+                if start > stop >= cur:
+                    break
+                if tcur is None:
+                    break
+
+                e.value = tcur.value
+
+                tcur = tcur.Next()
+                e = self.__find_relative(e, step)
+                cur += step
         else:
             raise TypeError
 
@@ -634,6 +707,22 @@ class List:
                 e = e.Next()
                 i += 1
         elif type(key) == slice:
-            pass
+            start, stop, step = \
+                self.__process_slice(key.start, key.stop, key.step)
+
+            if self.__is_empty_slice(start, stop, step):
+                return
+
+            cur = start
+            e = self.__find(cur)
+            while True:
+                if start < stop <= cur:
+                    break
+                if start > stop >= cur:
+                    break
+                nexte = self.__find_relative(e, step)
+                self.Remove(e)
+                e = nexte
+                cur += step
         else:
             raise TypeError

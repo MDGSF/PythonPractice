@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from collections import Iterable
 import types
 
 
@@ -66,9 +67,21 @@ def test2():
     print(isinstance((1, 2, 3), (list, tuple)))  # True
 
 
+def test3():
+    print('\ntest3')
+    print(isinstance('abc', Iterable))
+    print(isinstance([1, 2, 3], Iterable))
+    print(isinstance((1, 2, 3), Iterable))
+    print(isinstance({1, 2, 3}, Iterable))
+    print(isinstance({"huangjian": 1}, Iterable))
+    print(isinstance(1, Iterable))
+    print(isinstance(1.2, Iterable))
+
+
 def main():
     test1()
     test2()
+    test3()
 
 
 if __name__ == "__main__":

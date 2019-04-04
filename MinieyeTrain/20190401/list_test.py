@@ -65,7 +65,7 @@ def checkListLen(l, len):
     return True
 
 
-def checkList(l, es):
+def checkList(l, es, msg=None):
     if not checkListLen(l, len(es)):
         return
 
@@ -73,7 +73,11 @@ def checkList(l, es):
     e = l.Front()
     while e is not None:
         if e.value != es[i]:
-            print(f'elt[{i}].value = {e.value}, want {es[i]}')
+            # print(f'elt[{i}].value = {e.value}, want {es[i]}')
+            print('\nmsg =', msg)
+            showlist(l)
+            print('es =', es)
+            return
         e = e.Next()
         i += 1
 
@@ -666,6 +670,16 @@ class TestList(unittest.TestCase):
         checkList(l, [1, 2, 3])
         checkList(newl, [100, 2, 3])
 
+    def test_list_init(self):
+        l = List([1, 2, 3])
+        checkList(l, [1, 2, 3])
+
+        l1 = List(1, 2, 3)
+        checkList(l1, [1, 2, 3])
+
+
+class TestListSlice(unittest.TestCase):
+
     def test_slice(self):
         l = List()
         l.PushBack(1)
@@ -825,8 +839,67 @@ class TestList(unittest.TestCase):
 
         checkList(l[2:1:-1], [3])
 
-        checkList(l[3:0:-1], [4, 3, 2])
+        checkList(l[3:0:-1], [4, 3, 2], 'l[3:0:-1]')
         checkList(l[3:1:-1], [4, 3])
+        checkList(l[3:2:-1], [4])
+        checkList(l[3:3:-1], [])
+        checkList(l[3:4:-1], [])
+        checkList(l[3:5:-1], [])
+        checkList(l[3:6:-1], [])
+
+    def test_slice_get(self):
+        l = List()
+        l.extend([0, 1, 2, 3, 4])
+
+        r = l[-1:-11:-1]
+        checkList(r, [4, 3, 2, 1, 0])
+
+    def test_slice_del(self):
+        l = List()
+        l.extend([x for x in range(6)])
+        checkList(l, [x for x in range(6)])
+
+        del l[1:2:-1]
+        checkList(l, [x for x in range(6)])
+
+        del l[1:1]
+        checkList(l, [x for x in range(6)])
+
+        del l[2:1]
+        checkList(l, [0, 1, 2, 3, 4, 5])
+
+        del l[1:3]
+        checkList(l, [0, 3, 4, 5])
+
+        del l[::2]
+        checkList(l, [3, 5])
+
+        del l[:]
+        checkList(l, [])
+
+    def test_slice_del2(self):
+        l = List()
+        l.extend([x for x in range(6)])
+        checkList(l, [x for x in range(6)])
+
+        del l[5:2:-2]
+        checkList(l, [0, 1, 2, 4])
+
+        del l[-1:-5:-3]
+        checkList(l, [1, 2])
+
+    def test_slice_set(self):
+        l = List()
+        l.extend([x for x in range(6)])
+
+        l[1:3] = [100, 99]
+        checkList(l, [0, 100, 99, 3, 4, 5])
+
+        l[1:3] = [200]
+        checkList(l, [0, 200, 99, 3, 4, 5])
+
+        l[1:6:2] = [100, 200, 300]
+        checkList(l, [0, 100, 99, 200, 4, 300])
 
 
 if __name__ == "__main__":
