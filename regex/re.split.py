@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-
 """
 re.split(pattern, string, maxsplit=0, flags=0)
 """
@@ -45,28 +44,28 @@ def test3():
     # 原字符串的末尾匹配到了，会在返回的列表的最后一个加个空字符串。
 
     result = re.split(r'\W+', '...words, words...')
-    print(result) # ['', 'words', 'words', '']
+    print(result)  # ['', 'words', 'words', '']
 
     result = re.split(r'\W+', 'words, words...')
-    print(result) # ['words', 'words', '']
+    print(result)  # ['words', 'words', '']
 
     result = re.split(r'\W+', '...words, words')
-    print(result) # ['', 'words', 'words']
+    print(result)  # ['', 'words', 'words']
 
     result = re.split(r'\W+', 'words, words')
-    print(result) # ['words', 'words']
+    print(result)  # ['words', 'words']
 
     result = re.split(r'(\W+)', '...words, words...')
-    print(result) # ['', '...', 'words', ', ', 'words', '...', '']
+    print(result)  # ['', '...', 'words', ', ', 'words', '...', '']
 
     result = re.split(r'(\W+)', 'words, words...')
-    print(result) # ['words', ', ', 'words', '...', '']
+    print(result)  # ['words', ', ', 'words', '...', '']
 
     result = re.split(r'(\W+)', '...words, words')
-    print(result) # ['', '...', 'words', ', ', 'words']
+    print(result)  # ['', '...', 'words', ', ', 'words']
 
     result = re.split(r'(\W+)', 'words, words')
-    print(result) # ['words', ', ', 'words']
+    print(result)  # ['words', ', ', 'words']
 
 
 def test4():
