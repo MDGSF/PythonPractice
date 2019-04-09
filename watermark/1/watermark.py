@@ -155,8 +155,14 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
         rgbaImage = Image.alpha_composite(rgbaImage, wmImage)
 
     t = BytesIO()
-    rgbaImage.save(t, format=suffix)
-    return t
+    if suffix == 'png':
+        rgbaImage.save(t, format=format, quality=80)
+        return t
+    elif suffix == 'jpg' or suffix == 'jpeg':
+        jpgImage = Image.new("RGB", rgbaImage.size, (255, 255, 255))
+        jpgImage.paste(rgbaImage, mask=rgbaImage.split()[3])  # 3 is the alpha channel
+        jpgImage.save(t, format='JPEG', quality=80)
+        return t
 
 
 def test4():
@@ -205,8 +211,8 @@ def test4():
 
     watermarks = [wm1, wm2, wm3, wm4, wm5]
 
-    imgWMData = AddWaterMarkV4(imgData, 'png', watermarks)
-    imgWMFile = open('newImage.png', 'wb')
+    imgWMData = AddWaterMarkV4(imgData, 'jpg', watermarks)
+    imgWMFile = open('newImage.jpg', 'wb')
     imgWMFile.write(imgWMData.getvalue())
     imgWMFile.close()
 
