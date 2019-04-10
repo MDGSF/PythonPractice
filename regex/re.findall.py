@@ -9,12 +9,12 @@ import re
 
 def test1():
     result = re.findall(r'\w+', 'Words, words, words')
-    print(result)
+    print(result) # ['Words', 'words', 'words']
 
 
 def test2():
     result = re.findall(r'(go)+', 'google, gogogle, gogogo')
-    print(result)
+    print(result) # ['go', 'go', 'go']
 
 
 def main():
