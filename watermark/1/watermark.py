@@ -93,8 +93,12 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
     originImage = Image.open(BytesIO(imgData))
     rgbaImage = originImage.convert('RGBA')
 
+    maxsize = max(rgbaImage.size[0], rgbaImage.size[1])
+    fontsize = maxsize // 40
+    print(f'maxsize = {maxsize}, fontsize = {fontsize}')
+
     for wm in watermarks:
-        font = ImageFont.truetype(wm['font'], wm['fontsize'])
+        font = ImageFont.truetype(wm['font'], fontsize)
         wmImage = Image.new('RGBA', rgbaImage.size, (255, 255, 255, 0))
         wmImageDrawer = ImageDraw.Draw(wmImage)
 
@@ -115,7 +119,7 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
                                              wm['rgba'][3]))
                     curx += random.randrange(text_size_x * 2, text_size_x * 3)
                 cury += random.randrange(text_size_y * 4, text_size_y * 5)
-        elif wm['type'] == 2: # 左上角
+        elif wm['type'] == 2:  # 左上角
             wmImageDrawer.text((0, 0),
                                wm['text'],
                                font=font,
@@ -123,7 +127,7 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
                                      wm['rgba'][1],
                                      wm['rgba'][2],
                                      wm['rgba'][3]))
-        elif wm['type'] == 3: # 左下角
+        elif wm['type'] == 3:  # 左下角
             dy = rgbaImage.size[1] - text_size_y
             wmImageDrawer.text((0, dy),
                                wm['text'],
@@ -132,7 +136,7 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
                                      wm['rgba'][1],
                                      wm['rgba'][2],
                                      wm['rgba'][3]))
-        elif wm['type'] == 4: # 右上角
+        elif wm['type'] == 4:  # 右上角
             dx = rgbaImage.size[0] - text_size_x
             wmImageDrawer.text((dx, 0),
                                wm['text'],
@@ -141,7 +145,7 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
                                      wm['rgba'][1],
                                      wm['rgba'][2],
                                      wm['rgba'][3]))
-        elif wm['type'] == 5: # 右下角
+        elif wm['type'] == 5:  # 右下角
             dx = rgbaImage.size[0] - text_size_x
             dy = rgbaImage.size[1] - text_size_y
             wmImageDrawer.text((dx, dy),
@@ -156,16 +160,24 @@ def AddWaterMarkV4(imgData, suffix, watermarks):
 
     t = BytesIO()
     if suffix == 'png':
-        rgbaImage.save(t, format=format, quality=80)
+        rgbaImage.save(t, format=suffix, quality=80)
         return t
     elif suffix == 'jpg' or suffix == 'jpeg':
         jpgImage = Image.new("RGB", rgbaImage.size, (255, 255, 255))
-        jpgImage.paste(rgbaImage, mask=rgbaImage.split()[3])  # 3 is the alpha channel
-        jpgImage.save(t, format='JPEG', quality=80)
+        jpgImage.paste(rgbaImage,
+                       mask=rgbaImage.split()[3])  # 3 is the alpha channel
+        jpgImage.save(t, format='JPEG', quality=100)
+        return t
+    else:
+        rgbaImage.save(t, format='png', quality=80)
         return t
 
 
 def test4():
+    """
+    1000*1000 fontsize: 20
+    3000*2000 fontsize: 100
+    """
     f = open('test.jpg', 'rb')
     imgData = f.read()
 
@@ -174,7 +186,7 @@ def test4():
         "text": '中国 minieye watermark',
         "font": 'msyh.ttf',
         "fontsize": 20,
-        "rgba": [255, 0, 0, 100]
+        "rgba": [255, 255, 255, 18]
     }
 
     wm2 = {
@@ -205,7 +217,7 @@ def test4():
         "type": 5,
         "text": 'Minieye 右下角',
         "font": 'msyh.ttf',
-        "fontsize": 20,
+        "fontsize": 60,
         "rgba": [255, 255, 255, 100]
     }
 
