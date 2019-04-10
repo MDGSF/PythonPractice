@@ -3,6 +3,7 @@
 
 """
 re.escape(pattern)
+Escape all the characters in pattern except ASCII letters, numbers and '_'.
 """
 
 import re
