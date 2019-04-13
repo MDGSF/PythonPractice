@@ -145,9 +145,9 @@ def AddWaterMarkV1(imgData, suffix, watermarks):
         return t
 
 
-def main():
-    app.run(debug=True, host="127.0.0.1", port=5001)
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     app.run(debug=True, host="127.0.0.1", port=5001)
+#
+#
+# if __name__ == "__main__":
+#     main()
