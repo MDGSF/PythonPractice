@@ -52,6 +52,27 @@ class TestTable(unittest.TestCase):
         self.assertTrue(e.issubset(a))
         self.assertTrue(a.issubset(e))
 
+    def test_insert(self):
+        a = Table()
+        for i in range(100):
+            a.insert(i)
+        self.check_table_keys(a, [i for i in range(100)])
+
+        for i in range(99, 2, -1):
+            a.remove(i)
+            self.check_table_keys(a, [i for i in range(i)])
+
+        self.check_table_keys(a, [0, 1, 2])
+
+        a.remove(0)
+        a.remove(1)
+        a.remove(2)
+        self.assertEqual(len(a), 0)
+
+        for i in range(20):
+            a.insert(i)
+        self.check_table_keys(a, [i for i in range(20)])
+
     def check_table_keys(self, table, expectlist):
         outputlist = []
         for node in table:
@@ -122,7 +143,6 @@ class TestTable(unittest.TestCase):
 
         a.insert(9)
         self.assertEqual(a.t.capacity, 8)
-        print('\na =', a)
 
 
 def main():

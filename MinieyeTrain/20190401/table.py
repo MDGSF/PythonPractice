@@ -89,10 +89,6 @@ class InnerTableIter:
         self.currentNode = self.table.table[self.currentIdx1][self.currentIdx2]
 
 
-def mainposition(maxsize, key):
-    return hash(key) % maxsize
-
-
 class InnerTable:
     def __init__(self, capacity=1):
         if capacity < 0:
@@ -163,6 +159,36 @@ class InnerTable:
         return result
 
 
+class TableIter:
+    """
+    TableIter is iterater for Table.
+    """
+
+    def __init__(self, t):
+        self.table = t
+        if len(self.table.oldt) == 0:
+            self.isold = False
+            self.current = self.table.t.__iter__()
+        else:
+            self.isold = True
+            self.current = self.table.oldt.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.isold:
+            try:
+                d = self.current.__next__()
+                return d
+            except StopIteration:
+                self.isold = False
+                self.current = self.table.t.__iter__()
+                return self.current.__next__()
+        else:
+            return self.current.__next__()
+
+
 class Table:
     """
     hashtable
@@ -190,6 +216,12 @@ class Table:
         self.oldt.remove(key)
         self.moveSomeOldToNew()
 
+    def get(self, key):
+        """
+        get node(key:value) from table, return value.
+        """
+        pass
+
     def exists(self, key):
         return self.t.exists(key) or self.oldt.exists(key)
 
@@ -209,7 +241,7 @@ class Table:
         """
         返回一个新的 table，这个新的 table 是 self 和 other 的合并。
         """
-        newt = Table(capacity=len(self)+len(other))
+        newt = Table(capacity=len(self) + len(other))
         self.merge1(self.oldt, newt.t)
         self.merge1(self.t, newt.t)
         self.merge1(other.oldt, newt.t)
@@ -246,6 +278,8 @@ class Table:
     def shrink(self):
         if len(self.oldt) > 0:
             self.merge1(self.t, self.oldt)
+        else:
+            self.oldt = self.t
         self.t = InnerTable(capacity=self.oldt.capacity // 2)
 
     def merge1(self, table1, table2):
@@ -285,31 +319,5 @@ class Table:
         return self.oldt.__str__() + "\n" + self.t.__str__()
 
 
-class TableIter:
-    """
-    TableIter is iterater for Table.
-    """
-
-    def __init__(self, t):
-        self.table = t
-        if len(self.table.oldt) == 0:
-            self.isold = False
-            self.current = self.table.t.__iter__()
-        else:
-            self.isold = True
-            self.current = self.table.oldt.__iter__()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.isold:
-            try:
-                d = self.current.__next__()
-                return d
-            except StopIteration:
-                self.isold = False
-                self.current = self.table.t.__iter__()
-                return self.current.__next__()
-        else:
-            return self.current.__next__()
+def mainposition(maxsize, key):
+    return hash(key) % maxsize
