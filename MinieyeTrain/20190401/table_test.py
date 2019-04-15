@@ -13,7 +13,7 @@ except:
     sys.path.append(_src_path)
 
 
-class TestList(unittest.TestCase):
+class TestTable(unittest.TestCase):
 
     def test_insert_remove(self):
         t = Table()
@@ -77,6 +77,10 @@ class TestList(unittest.TestCase):
         c = a.union(b)
         self.check_table_keys(c, [1, 2, 3, 4, 5])
 
+    # def test_str(self):
+    #     a = Table(1, 2, 3)
+    #     print('\ntable a =', a)
+
     def test_eq(self):
         a = Table(1, 2, 3)
         b = Table(1, 2, 3)
@@ -85,6 +89,40 @@ class TestList(unittest.TestCase):
         self.assertTrue(a == b)
         self.assertFalse(a == c)
         self.assertFalse(a == d)
+
+    # 运行单个测试用例
+    # python table_test.py -v TestTable.test_grow_shrink
+    def test_grow_shrink(self):
+        a = Table()
+        self.assertEqual(a.t.capacity, 1)
+
+        a.insert(1)
+        self.assertEqual(a.t.capacity, 1)
+
+        a.insert(2)
+        self.assertEqual(a.t.capacity, 1)
+
+        a.insert(3)
+        self.assertEqual(a.t.capacity, 2)
+
+        a.insert(4)
+        self.assertEqual(a.t.capacity, 2)
+
+        a.insert(5)
+        self.assertEqual(a.t.capacity, 4)
+
+        a.insert(6)
+        self.assertEqual(a.t.capacity, 4)
+
+        a.insert(7)
+        self.assertEqual(a.t.capacity, 4)
+
+        a.insert(8)
+        self.assertEqual(a.t.capacity, 4)
+
+        a.insert(9)
+        self.assertEqual(a.t.capacity, 8)
+        print('\na =', a)
 
 
 def main():
