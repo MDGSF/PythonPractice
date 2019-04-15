@@ -52,6 +52,40 @@ class TestList(unittest.TestCase):
         self.assertTrue(e.issubset(a))
         self.assertTrue(a.issubset(e))
 
+    def check_table_keys(self, table, expectlist):
+        outputlist = []
+        for node in table:
+            outputlist.append(node[0])
+        outputlist.sort()
+
+        len1 = len(outputlist)
+        len2 = len(expectlist)
+        self.assertEqual(len1, len2)
+
+        i = 0
+        while i < len1:
+            self.assertEqual(outputlist[i], expectlist[i])
+            i += 1
+
+    def test_iter(self):
+        a = Table(range(5))
+        self.check_table_keys(a, [x for x in range(5)])
+
+    def test_union(self):
+        a = Table(1, 2, 3)
+        b = Table(2, 3, 4, 5)
+        c = a.union(b)
+        self.check_table_keys(c, [1, 2, 3, 4, 5])
+
+    def test_eq(self):
+        a = Table(1, 2, 3)
+        b = Table(1, 2, 3)
+        c = Table(1)
+        d = Table(1, 2)
+        self.assertTrue(a == b)
+        self.assertFalse(a == c)
+        self.assertFalse(a == d)
+
 
 def main():
     unittest.main()

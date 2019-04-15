@@ -14,6 +14,80 @@ class Node:
         return "(" + str(self.key) + ", " + str(self.value) + ")"
 
 
+class TableIter:
+    """
+    TableIter is iterater for Table.
+    """
+
+    def __init__(self, t):
+        self.table = t
+        self.currentIdx1 = None
+        self.currentIdx2 = None
+        self.currentNode = None
+        self.first()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.table is None \
+                or self.currentIdx1 is None \
+                or self.currentIdx2 is None \
+                or self.currentNode is None:
+            raise StopIteration
+        else:
+            k = self.currentNode.key
+            v = self.currentNode.value
+
+            while True:
+                if self.currentIdx1 >= len(self.table.t):
+                    self.currentIdx1 = None
+                    self.currentIdx2 = None
+                    self.currentNode = None
+                    break
+                if self.table.t[self.currentIdx1] is None:
+                    self.currentIdx1 += 1
+                    self.currentIdx2 = -1
+                    continue
+
+                l = self.table.t[self.currentIdx1]
+                if self.currentIdx2 < len(l) - 1:
+                    self.currentIdx2 += 1
+                    self.currentNode = \
+                        self.table.t[self.currentIdx1][self.currentIdx2]
+                    break
+                else:
+                    self.currentIdx1 += 1
+                    self.currentIdx2 = -1
+            return k, v
+
+    def first(self):
+        if len(self.table.t) == 0:
+            self.currentIdx1 = None
+            self.currentIdx2 = None
+            self.currentNode = None
+            return
+
+        self.currentIdx1 = 0
+        self.currentIdx2 = 0
+        while True:
+            if self.currentIdx1 >= len(self.table.t):
+                break
+            if self.table.t[self.currentIdx1] is None:
+                self.currentIdx1 += 1
+                self.currentIdx2 = 0
+                continue
+
+            l = self.table.t[self.currentIdx1]
+            if self.currentIdx2 < len(l):
+                break
+            else:
+                self.currentIdx1 += 1
+                self.currentIdx2 = 0
+
+        self.currentNode = self.table.t[self.currentIdx1][self.currentIdx2]
+
+
 class Table:
     """
     hashtable
@@ -79,15 +153,11 @@ class Table:
         """
         返回一个新的 table，这个新的 table 是 self 和 other 的合并。
         """
-        pass
-
-    def copy(self):
-        """
-        返回一个 table 的拷贝
-        """
         newt = Table()
-        newt.t = copy.deepcopy(self.t)
-        newt.len = self.len
+        for node in self:
+            newt.insert(node[0], node[1])
+        for node in other:
+            newt.insert(node[0], node[1])
         return newt
 
     def mainposition(self, key):
@@ -96,6 +166,16 @@ class Table:
     def __len__(self):
         """support len(obj)"""
         return self.len
+
+    def __eq__(self, other):
+        for node in self:
+            if not other.exists(node[0]):
+                return False
+        return True
+
+    def __iter__(self):
+        """support iterable, ex. for i in table:"""
+        return TableIter(self)
 
     def __str__(self):
         result = ""
