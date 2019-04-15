@@ -144,6 +144,19 @@ class TestTable(unittest.TestCase):
         a.insert(9)
         self.assertEqual(a.t.capacity, 8)
 
+    def test_get(self):
+        a = Table()
+        for i in range(10):
+            a.insert(i, i)
+        for i in range(10):
+            self.assertEqual(a.get(i), i)
+
+        a.insert("name", "huangjian")
+        self.assertEqual(a.get("name"), "huangjian")
+
+        a.remove("name")
+        self.assertEqual(a.get("name"), None)
+
 
 def main():
     unittest.main()

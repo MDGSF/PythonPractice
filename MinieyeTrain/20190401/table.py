@@ -139,6 +139,16 @@ class InnerTable:
                     return True
         return False
 
+    def get(self, key):
+        if self.len == 0 or self.capacity == 0:
+            return None, False
+        p = mainposition(self.capacity, key)
+        if self.table[p]:
+            for node in self.table[p]:
+                if node.key == key:
+                    return node.value, True
+        return None, False
+
     def __iter__(self):
         """support iterable, ex. for i in table:"""
         return InnerTableIter(self)
@@ -220,7 +230,19 @@ class Table:
         """
         get node(key:value) from table, return value.
         """
-        pass
+
+        # find in new table
+        result = self.t.get(key)
+        if result[1]:
+            return result[0]
+
+        # find in old table
+        result = self.oldt.get(key)
+        if result[1]:
+            return result[0]
+
+        # no found
+        return None
 
     def exists(self, key):
         return self.t.exists(key) or self.oldt.exists(key)
