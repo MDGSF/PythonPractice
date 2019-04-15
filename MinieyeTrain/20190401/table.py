@@ -201,7 +201,7 @@ class TableIter:
 
 class Table:
     """
-    hashtable
+    Table represents a hashtable.
     """
 
     def __init__(self, *args, capacity=1, **kwargs):

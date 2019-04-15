@@ -14,16 +14,21 @@ except:
 
 class MyDict():
     def __init__(self, **kwargs):
-        pass
+        self.t = table.Table(**kwargs)
 
     def get(self, key, default=None):
-        pass
+        value = self.t.get(key)
+        if value is None:
+            return default
+        else:
+            return value
 
     def set(self, key, value):
-        pass
+        self.t.insert(key, value)
 
     def update(self, other):
-        pass
+        for node in other:
+            self.t.insert(node[0], node[1])
 
     def values(self):
         pass
@@ -35,11 +40,17 @@ class MyDict():
         pass
 
     def __str__(self):
-        pass
+        return self.t.__str__()
 
 
 def main():
-    pass
+    a = MyDict(name="huangjian")
+    print(a)
+
+    print(a.get("name"))
+
+    a.set("name", "jianhuang")
+    print(a.get("name"))
 
 
 if __name__ == "__main__":
