@@ -27,7 +27,7 @@ class MyDict():
         self.t.insert(key, value)
 
     def update(self, other):
-        for node in other:
+        for node in other.t:
             self.t.insert(node[0], node[1])
 
     def values(self):
@@ -51,6 +51,12 @@ def main():
 
     a.set("name", "jianhuang")
     print(a.get("name"))
+
+    b = MyDict()
+    b.set("name", "jian")
+    b.set("id", 1)
+    a.update(b)
+    print(a)
 
 
 if __name__ == "__main__":
