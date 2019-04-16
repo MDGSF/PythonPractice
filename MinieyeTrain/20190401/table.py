@@ -268,6 +268,18 @@ class Table:
             self.__shrink()
         self.__moveSomeOldToNew()
 
+    def setdefault(self, key, default):
+        """
+        Insert key with a value of default if key is not in the dictionary.
+
+        Return the value for key if key is in the dictionary, else default.
+        """
+        if self.exists(key):
+            return self.get(key)
+        else:
+            self.insert(key, default)
+            return default
+
     def issubset(self, other):
         """
         判断 self 是否是 other 的子集。
@@ -315,6 +327,9 @@ class Table:
                 self.oldt.init()
 
     def __needGrow(self):
+        """
+        判断是否需要动态扩容。
+        """
         if self.t.len > int(self.t.capacity * 1.5):
             return True
         return False
@@ -327,6 +342,9 @@ class Table:
         # print('grow, t.capacity=', self.t.capacity)
 
     def __needShrink(self):
+        """
+        判断是否需要减少空间占用。
+        """
         if (len(self.oldt) + len(self.t)) * 5 < self.t.capacity:
             return True
         return False

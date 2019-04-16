@@ -225,23 +225,40 @@ class TestTable(unittest.TestCase):
               f'{a.t.capacity}], total[{a.oldt.len+a.t.len}:'
               f'{a.oldt.capacity+a.t.capacity}]')
 
-    def test_capacity(self):
+    # def test_capacity(self):
+    #     a = Table()
+    #     for i in range(10000):
+    #         a[i] = i
+    #     self.showTableInfo(a)
+    #
+    #     for i in range(5000):
+    #         del a[i]
+    #     self.showTableInfo(a)
+    #
+    #     for i in range(5000, 9000):
+    #         del a[i]
+    #     self.showTableInfo(a)
+    #
+    #     for i in range(9000, 9500):
+    #         del a[i]
+    #     self.showTableInfo(a)
+
+    def test_setdefault(self):
         a = Table()
-        for i in range(10000):
-            a[i] = i
-        self.showTableInfo(a)
 
-        for i in range(5000):
-            del a[i]
-        self.showTableInfo(a)
+        # 不存在 ID 的时候，会执行插入
+        v = a.setdefault("ID", 110)
+        self.assertEqual(v, 110)
+        self.check_table_dict(a, {
+            "ID": 110
+        })
 
-        for i in range(5000, 9000):
-            del a[i]
-        self.showTableInfo(a)
-
-        for i in range(9000, 9500):
-            del a[i]
-        self.showTableInfo(a)
+        # 已经存在了，不会更新
+        v = a.setdefault("ID", 120)
+        self.assertEqual(v, 110)
+        self.check_table_dict(a, {
+            "ID": 110
+        })
 
 
 def main():
