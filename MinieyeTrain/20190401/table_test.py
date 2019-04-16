@@ -139,7 +139,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(a.t.capacity, 4)
 
         a.insert(8)
-        self.assertEqual(a.t.capacity, 4)
+        self.assertEqual(a.t.capacity, 8)
 
         a.insert(9)
         self.assertEqual(a.t.capacity, 8)
@@ -219,6 +219,29 @@ class TestTable(unittest.TestCase):
 
         self.assertEqual(max(phonebook1), "zoe")
         self.assertEqual(min(phonebook1), "ann")
+
+    def showTableInfo(self, a):
+        print(f'oldt[{a.oldt.len}:{a.oldt.capacity}], t[{a.t.len}:'
+              f'{a.t.capacity}], total[{a.oldt.len+a.t.len}:'
+              f'{a.oldt.capacity+a.t.capacity}]')
+
+    def test_capacity(self):
+        a = Table()
+        for i in range(10000):
+            a[i] = i
+        self.showTableInfo(a)
+
+        for i in range(5000):
+            del a[i]
+        self.showTableInfo(a)
+
+        for i in range(5000, 9000):
+            del a[i]
+        self.showTableInfo(a)
+
+        for i in range(9000, 9500):
+            del a[i]
+        self.showTableInfo(a)
 
 
 def main():

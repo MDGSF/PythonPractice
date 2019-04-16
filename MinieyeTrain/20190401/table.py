@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import copy
+import time
 from collections import Iterable
 
 
@@ -300,10 +300,17 @@ class Table:
         move some node from self.oldt to self.t
         """
         if len(self.oldt) > 0:
+            MilliTime = lambda: int(round(time.time() * 1000))
+            startTime = MilliTime()
+            i = 0
             for node in self.oldt:
                 self.t.insert(node[0], node[1])
                 self.oldt.remove(node[0])
-                break
+                i += 1
+                if i > 10:
+                    curTime = MilliTime()
+                    if curTime - startTime > 100:
+                        break
             if len(self.oldt) == 0:
                 self.oldt.init()
 

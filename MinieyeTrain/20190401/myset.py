@@ -12,7 +12,7 @@ except:
     sys.path.append(_src_path)
 
 
-class MySet():
+class MySet:
     def __init__(self, *args):
         self.t = table.Table(args)
 
