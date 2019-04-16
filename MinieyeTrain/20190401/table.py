@@ -97,9 +97,10 @@ class InnerTable:
         self.capacity = capacity
         self.table = [None for i in range(capacity)]
 
-    def __len__(self):
-        """support len(obj)"""
-        return self.len
+    def init(self, capacity=1):
+        self.len = 0
+        self.capacity = capacity
+        self.table = [None for i in range(capacity)]
 
     def insert(self, key, value=None):
         if self.capacity == 0:
@@ -148,6 +149,10 @@ class InnerTable:
                 if node.key == key:
                     return node.value, True
         return None, False
+
+    def __len__(self):
+        """support len(obj)"""
+        return self.len
 
     def __iter__(self):
         """support iterable, ex. for i in table:"""
@@ -220,11 +225,14 @@ class Table:
             self.insert(key, value)
 
     def insert(self, key, value=None):
-        if self.needGrow():
-            self.grow()
+        """
+        往 self 中插入 key=value
+        """
+        if self.__needGrow():
+            self.__grow()
         self.t.insert(key, value)
         self.oldt.remove(key)
-        self.moveSomeOldToNew()
+        self.__moveSomeOldToNew()
 
     def get(self, key):
         """
@@ -245,15 +253,25 @@ class Table:
         return None
 
     def exists(self, key):
+        """
+        判断 key 在 self 中是否存在。
+        """
         return self.t.exists(key) or self.oldt.exists(key)
 
     def remove(self, key):
+        """
+        从 self 中删除 key。
+        """
         self.t.remove(key)
         self.oldt.remove(key)
-        if self.needShrink():
-            self.shrink()
+        if self.__needShrink():
+            self.__shrink()
+        self.__moveSomeOldToNew()
 
     def issubset(self, other):
+        """
+        判断 self 是否是 other 的子集。
+        """
         for node in self:
             if not other.exists(node[0]):
                 return False
@@ -264,13 +282,20 @@ class Table:
         返回一个新的 table，这个新的 table 是 self 和 other 的合并。
         """
         newt = Table(capacity=len(self) + len(other))
-        self.merge1(self.oldt, newt.t)
-        self.merge1(self.t, newt.t)
-        self.merge1(other.oldt, newt.t)
-        self.merge1(other.t, newt.t)
+        merge1(self.oldt, newt.t)
+        merge1(self.t, newt.t)
+        merge1(other.oldt, newt.t)
+        merge1(other.t, newt.t)
         return newt
 
-    def moveSomeOldToNew(self):
+    def update(self, other):
+        """
+        use other Table to update self.
+        """
+        for node in other.t:
+            self.t.insert(node[0], node[1])
+
+    def __moveSomeOldToNew(self):
         """
         move some node from self.oldt to self.t
         """
@@ -279,47 +304,32 @@ class Table:
                 self.t.insert(node[0], node[1])
                 self.oldt.remove(node[0])
                 break
+            if len(self.oldt) == 0:
+                self.oldt.init()
 
-    def needGrow(self):
+    def __needGrow(self):
         if self.t.len > int(self.t.capacity * 1.5):
             return True
         return False
 
-    def grow(self):
+    def __grow(self):
         if len(self.oldt) > 0:
-            self.merge2(self.oldt, self.t)
+            merge2(self.oldt, self.t)
         self.oldt = self.t
         self.t = InnerTable(capacity=self.oldt.capacity * 2)
         # print('grow, t.capacity=', self.t.capacity)
 
-    def needShrink(self):
+    def __needShrink(self):
         if (len(self.oldt) + len(self.t)) * 5 < self.t.capacity:
             return True
         return False
 
-    def shrink(self):
+    def __shrink(self):
         if len(self.oldt) > 0:
-            self.merge1(self.t, self.oldt)
+            merge1(self.t, self.oldt)
         else:
             self.oldt = self.t
         self.t = InnerTable(capacity=self.oldt.capacity // 2)
-
-    def merge1(self, table1, table2):
-        """
-        merge table1's data to table2.
-        If table1 and table2 has the same key, remain table1, remove table2.
-        """
-        for node in table1:
-            table2.insert(node[0], node[1])
-
-    def merge2(self, table1, table2):
-        """
-        merge table1's data to table2.
-        If table1 and table2 has the same key, remain table2, remove table1.
-        """
-        for node in table1:
-            if not table2.exists(node[0]):
-                table2.insert(node[0], node[1])
 
     def __len__(self):
         """support len(obj)"""
@@ -337,9 +347,43 @@ class Table:
         """support iterable, ex. for i in table:"""
         return TableIter(self)
 
+    def __getitem__(self, key):
+        """support dict[key]"""
+        value = self.get(key)
+        if value is None:
+            raise KeyError(key)
+        return value
+
+    def __setitem__(self, key, value):
+        """support dict[key] = value"""
+        self.insert(key, value)
+
+    def __delitem__(self, key):
+        """support del dict[key]"""
+        self.remove(key)
+
     def __str__(self):
         return self.oldt.__str__() + "\n" + self.t.__str__()
 
 
 def mainposition(maxsize, key):
     return hash(key) % maxsize
+
+
+def merge1(table1, table2):
+    """
+    merge table1's data to table2.
+    If table1 and table2 has the same key, remain table1, remove table2.
+    """
+    for node in table1:
+        table2.insert(node[0], node[1])
+
+
+def merge2(table1, table2):
+    """
+    merge table1's data to table2.
+    If table1 and table2 has the same key, remain table2, remove table1.
+    """
+    for node in table1:
+        if not table2.exists(node[0]):
+            table2.insert(node[0], node[1])

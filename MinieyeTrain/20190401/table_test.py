@@ -157,6 +157,69 @@ class TestTable(unittest.TestCase):
         a.remove("name")
         self.assertEqual(a.get("name"), None)
 
+    def test_getitem(self):
+        a = Table()
+        for i in range(10):
+            a.insert(i, i)
+        for i in range(10):
+            self.assertEqual(a[i], i)
+
+        with self.assertRaises(KeyError):
+            a[100]
+
+        with self.assertRaises(TypeError):
+            a[1:2]
+
+    def test_setitem(self):
+        a = Table()
+        a["name"] = "huangjian"
+        a["ID"] = 110
+        self.assertEqual(a["name"], "huangjian")
+        self.assertEqual(a["ID"], 110)
+
+        a["ID"] = 120
+        self.assertEqual(a["ID"], 120)
+
+    def test_delitem(self):
+        a = Table()
+        a["name"] = "huangjian"
+        self.assertEqual(a["name"], "huangjian")
+        self.assertEqual(len(a), 1)
+
+        del a["name"]
+        with self.assertRaises(KeyError):
+            a["name"]
+
+        self.assertEqual(len(a), 0)
+
+    def check_table_dict(self, table, expectdict):
+        self.assertEqual(len(table), len(expectdict))
+
+        for node in table:
+            self.assertTrue(node[0] in expectdict)
+            self.assertEqual(node[1], expectdict[node[0]])
+
+    def test_update(self):
+        a = Table(name="huangjian", ID=1)
+        b = Table(ann=6575, name="huangping")
+        a.update(b)
+        self.check_table_dict(a, {
+            "name": "huangping",
+            "ID": 1,
+            "ann": 6575})
+
+    def test_max_min(self):
+        """
+        max(dict) return the max key.
+        """
+        phonebook1 = {'ann': 6575, 'bob': 8982, 'joe': 2598, 'zoe': 1225,
+                      'ann': 6585}
+        phonebook2 = {'john': 9876, 'mike': 5603, 'stan': 6898, 'eric': 7898}
+        phonebook1.update(phonebook2)
+
+        self.assertEqual(max(phonebook1), "zoe")
+        self.assertEqual(min(phonebook1), "ann")
+
 
 def main():
     unittest.main()

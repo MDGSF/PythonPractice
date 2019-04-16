@@ -27,8 +27,7 @@ class MyDict():
         self.t.insert(key, value)
 
     def update(self, other):
-        for node in other.t:
-            self.t.insert(node[0], node[1])
+        self.t.update(other.t)
 
     def values(self):
         pass
