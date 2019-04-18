@@ -54,6 +54,8 @@ def main():
     t.width(lv)  # 设置画笔宽度
     t.pencolor(r, g, b)  # 设置画笔颜色
 
+    l = 120
+
     t.penup()  # 提笔
     t.bk(l)  # 后退，方向不改变
     t.pendown()  # 落笔
@@ -61,7 +63,7 @@ def main():
 
     t.speed(0)  # 设置画笔速度
 
-    draw_tree(120, 4)
+    draw_tree(l, 4)
 
     t.done()
 
