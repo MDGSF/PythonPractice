@@ -16,6 +16,9 @@ assertNotIn(a, b)        a not in b
 python list_test.py
 python list_test.py -v
 python -m unittest list_test
+
+# 运行单个测试用例
+# python table_test.py -v TestTable.test_grow_shrink
 """
 
 import sys
