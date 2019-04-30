@@ -17,10 +17,10 @@ class Element:
 
     def __init__(self, val=None):
         """
-        :param next: Points to next element.
-        :param prev: Points to previous element.
-        :param value: The value stored with this element.
-        :param list: The list to which this element belongs.
+        next: Points to next element.
+        prev: Points to previous element.
+        value: The value stored with this element.
+        list: The list to which this element belongs.
         """
         self.__next = None
         self.__prev = None
@@ -258,13 +258,10 @@ class List:
             e = e.Next()
         return result
 
-    def sort(self, key=None, reverse=False):
+    def sort(self, key=lambda x: x, reverse=False):
         """
         Sort the items of the list in place
         """
-
-        if key is None:
-            key = lambda x: x
 
         def cmp(a, b):
             return key(a.value) < key(b.value) if reverse \
@@ -459,7 +456,8 @@ class List:
         self.len -= 1
         return e
 
-    def __move(self, e, at):
+    @staticmethod
+    def __move(e, at):
         """__move moves e to next to at and returns e"""
         if e == at:
             return e
