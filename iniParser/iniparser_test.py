@@ -85,6 +85,14 @@ class TestIniParser(unittest.TestCase):
         self.assertTrue(p.hasKey("default", "globalname"))
         self.assertEqual(p.get("default", "globalname"), "ghuangjian")
 
+    def testGetNotExistKey(self):
+        p = IniParser()
+        p.read("test.ini")
+
+        self.assertEqual(p.get("not_exist_section", "aa"), "")
+
+        self.assertEqual(p.get("Section_a", "not_exist_key"), "")
+
 
 def main():
     pass

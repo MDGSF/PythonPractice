@@ -217,12 +217,15 @@ class IniParser:
     def get(self, sectionname, key):
         """
         Get value with key in sectionname section.
+        If sectionname or key is not exists, return empty string "".
         """
         if type(key) != str or type(sectionname) != str:
             raise TypeError
         if len(key) == 0 or len(sectionname) == 0:
             return ""
         section = self.__getSection(sectionname)
+        if section is None:
+            return ""
         return section[key]
 
     def getint(self, sectionname, key):
@@ -271,4 +274,3 @@ class IniParser:
                 result += node.key + " = " + node.value + "\n"
             result += "\n"
         return result
-
