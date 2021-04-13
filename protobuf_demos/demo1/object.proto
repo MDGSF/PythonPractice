@@ -1,0 +1,75 @@
+syntax = "proto3";
+import "geometry.proto";
+// import "data_source.proto";
+
+package perception;
+
+enum ObjectType { // 目标大分类
+    ObjectType_Vehicle = 0;
+    ObjectType_Pedestrian = 1;
+    ObjectType_TrafficSign = 2;
+    ObjectType_TrafficLight = 3;
+    ObjectType_SpeedCamera = 4;
+}
+
+/* 各类目标的细分类
+*/
+
+/* 各类目标的姿态分类
+*/
+
+message ImageInfo {
+    perception.common.Rect2f det_rect = 1;    // 检测框
+    perception.common.Rect2f tail_rect = 2;   // 尾部框
+    perception.common.Rect2f reg_rect = 3;    // 回归框(建议使用尾部框代替)
+    perception.common.Rect2f track_rect = 4;  // 跟踪框
+    perception.common.Rect2f smooth_rect = 5; // 光流跟踪框
+    perception.common.Box3D box = 6;          // 3dbox
+}
+
+message WorldInfo {
+    perception.common.Point3D vel = 1;        // 速度
+    perception.common.Point3D rel_vel = 2;    // 相对速度
+    perception.common.Point3D acc = 3;        // 加速度
+    perception.common.Point3D pos = 4;        // 位置
+    perception.common.Size3D size = 5;        // 长宽高
+    perception.common.Angle3f angle = 6;      // 与自车的中心夹角 左边缘夹角 右边缘夹角
+    perception.common.Box3D box = 7;          // 3dbox
+}
+
+/*
+1. dataset 二进制快速索引情况下,file_path填写xxx.dataset.json在数据集目录下的地址
+   frame_num 填写图像在dataset下的编号
+2. 视频 file_path填写xxx.avi/xxx.mp4在数据集目录下的地址
+   frame_num 填写图像是xxx.avi的第几帧
+frame_id选填,建议使用frame_num来定位
+
+sample
+\\192.168.6.63\dataset\dataset\jizhi\20210107_shenzhen_gs4_day_x1j_1v1r_control_ars_x1j_1v1r_q4_cv22\20210107110552\video\camera_00122561.avi 123
+
+\\192.168.6.63\dataset\dataset\ collect_path 是数据集目录地址,无需记录
+file_path = jizhi\20210107_shenzhen_gs4_day_x1j_1v1r_control_ars_x1j_1v1r_q4_cv22\20210107110552\video\camera_00122561.avi
+frame_num = 123
+*/
+message SourceInfo {         // 描述当真帧数据源的文件
+    string file_path = 1;    // 数据地址
+    int32 frame_num = 2;     // 帧序号
+    int32 frame_id = 3;      // 算法计算时用到的frame_id
+}
+
+message Object {
+    int32 id = 1;         // 目标ID
+    int32 type = 2;       // 目标类型 大类
+    int32 cls = 3;        // 目标类别 小类
+    int32 pos_cls = 4;    // 目标类别 小类
+    float confidence = 5; // 置信度
+    int32 frame_cnt = 6;  // frame count
+    int32 life_time = 7;  // optional ms 
+    ImageInfo img_info = 8; // 图像信息
+    WorldInfo world_info = 9; // 车辆坐标系信息
+}
+
+message ObjectList {
+    repeated Object list = 1;       // object list
+    SourceInfo source_info = 2;     // frame source
+}

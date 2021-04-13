@@ -1,0 +1,67 @@
+syntax = "proto3";
+package perception.common;
+
+// A general 2D point
+message Point2D {
+	double x = 1;
+	double y = 2;
+}
+
+message Size3D {
+	double w = 1;
+	double h = 2;
+	double l = 3;
+}
+
+message Angle3f {
+	float center = 1;
+	float left = 2;
+	float right = 3;
+}
+
+// A general 3D point
+message Point3D {
+	double x = 1;
+	double y = 2;
+	double z = 3;
+}
+
+message Point {
+	int32 x = 1;
+	int32 y = 2;
+}
+
+message Point2f {
+	float x = 1;
+	float y = 2;
+}
+
+message Rect {
+    int32 x = 1;
+    int32 y = 2;
+    int32 w = 3;
+    int32 h = 4;
+}
+
+message Rect2f {
+    float x = 1;
+    float y = 2;
+    float w = 3;
+    float h = 4;
+}
+
+message Box3D {
+  Point3D lower_lt = 1;
+  Point3D lower_lb = 2;
+  Point3D lower_rb = 3;
+  Point3D lower_rt = 4;
+  Point3D upper_lt = 5;
+  Point3D upper_lb = 6;
+  Point3D upper_rb = 7;
+  Point3D upper_rt = 8;
+  float conf = 9;
+}
+
+message Polygon {
+	repeated Point3D pts = 1;
+}
