@@ -1,6 +1,8 @@
 # hello
 
 ```sh
+uv venv --python 3.11.11
+uv python pin 3.11.11
 uv add requests
 uv sync
 uv lock
