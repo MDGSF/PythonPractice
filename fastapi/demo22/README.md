@@ -5,7 +5,7 @@ uv init -p 3.11.11 --name demo .
 uv venv
 source .venv/bin/activate
 deactivate
-uv add --index https://mirrors.aliyun.com/pypi/simple/ "fastapi[all]" "uvicorn[standard]"
+uv add --index https://mirrors.aliyun.com/pypi/simple/ "fastapi[all]" "uvicorn[standard]" python-multipart
 
 # 启动
 uvicorn main:app --reload
