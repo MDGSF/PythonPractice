@@ -17,6 +17,9 @@ def main():
     big.feature_a.show_context()
     big.call_feature_a_show()
 
+    print("-------------------------")
+    big.feature_b.show()
+
 
 if __name__ == "__main__":
     main()

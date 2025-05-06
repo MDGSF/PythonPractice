@@ -8,8 +8,9 @@ class BigClass(IBigClass):
     def __init__(self):
         self.ctx = BigClassContext()
         self.ctx.shared_state = {"count": 0}
-        self.feature_a = FeatureA(self)
-        self.feature_b = FeatureB(self)
+        feature_a = FeatureA(self)
+        self.feature_a = feature_a
+        self.feature_b = FeatureB(self, feature_a)
 
     def get_shared_value(self, key: str) -> int:
         return self.ctx.shared_state[key]
